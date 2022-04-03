@@ -1,5 +1,3 @@
-// mongodb+srv://dbuser:<password>@cluster0.qq7c7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-
 // ** Installed dependencies
 const express = require("express");
 const mongoose = require("mongoose");
