@@ -1,37 +1,37 @@
 // Installed dependencies
-const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 // ** Swagger · http://localhost:4000/api/docs/
-const swaggerUi = require("swagger-ui-express");
-const yaml = require("yamljs");
+const swaggerUi = require('swagger-ui-express');
+const yaml = require('yamljs');
 // Swagger Setup
-const swaggerDefinition = yaml.load("./swagger.yaml");
+const swaggerDefinition = yaml.load('./swagger.yaml');
 
 // Creates express app
 const app = express();
 
 app.use(
-  "/api/docs",
+  '/api/docs',
   swaggerUi.serve,
   swaggerUi.setup(swaggerDefinition, {
-    customSiteTitle: "API · Project Management App",
+    customSiteTitle: 'API · Project Management App',
   })
 );
-require("dotenv-flow").config(); // Imports the port settings
+require('dotenv-flow').config(); // Imports the port settings
 
 // Handle CORS  (for Heroku to work) and Middleware
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Origin', '*');
   // If using js .fetch and not axios
   res.header(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+    'Access-Control-Allow-Methods',
+    'GET,HEAD,OPTIONS,POST,PUT,DELETE'
   );
   res.header(
-    "Access-Control-Allow-Headers",
-    "auth-token, Origin, X-Requested-With, Content-Type, Accept"
+    'Access-Control-Allow-Headers',
+    'auth-token, Origin, X-Requested-With, Content-Type, Accept'
   );
   next();
 });
@@ -49,25 +49,25 @@ mongoose
     }
   )
   .then(() => {
-    console.log("Connected successfully to MongoDB");
+    console.log('Connected successfully to MongoDB');
   })
   .catch((err) => console.log(err));
 
 // ROUTES
-app.get("/", (req, res) => {
+app.get('/', (req, res) => {
   // http://localhost:4000/
-  res.status(200).send({ message: "Welcome to backend" });
+  res.status(200).send({ message: 'Welcome to backend' });
 });
 
 // Import and Use
-const TodoRoute = require("./routes/Todo");
-app.use("/api/todos", TodoRoute);
+const TodoRoute = require('./routes/Todo');
+app.use('/api/todos', TodoRoute);
 
 // PORT
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, function () {
   // We listen to the port
-  console.log("Server is running on port " + PORT);
+  console.log('Server is running on port ' + PORT);
 });
 
 module.exports = app; //Exports app as module

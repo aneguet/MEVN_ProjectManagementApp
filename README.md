@@ -18,3 +18,29 @@ npm run start
 ```
 http://localhost:4000/api/docs/
 ```
+
+# Frontend (VUE 3)
+
+## Install dependencies
+
+```
+npm install
+```
+
+## Compiles and hot-reloads for development
+
+```
+npm run serve
+```
+
+## Compiles and minifies for production
+
+```
+npm run build
+```
+
+## Lints and fixes files
+
+```
+npm run lint
+```
