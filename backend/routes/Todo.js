@@ -1,6 +1,6 @@
 // Imports
 const router = require('express').Router();
-const Todo = require('../models/todo');
+const Todo = require('../models/Todo');
 
 // We are using async
 

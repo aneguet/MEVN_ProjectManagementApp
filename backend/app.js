@@ -60,8 +60,11 @@ app.get('/', (req, res) => {
 });
 
 // Import and Use
-const TodoRoute = require('./routes/Todo');
-app.use('/api/todos', TodoRoute);
+const todoRoutes = require('./routes/todo');
+app.use('/api/todos', todoRoutes);
+
+const authRoutes = require('./routes/auth');
+app.use('/api/user', authRoutes);
 
 // PORT
 const PORT = process.env.PORT || 4000;
