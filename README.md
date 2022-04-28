@@ -44,3 +44,5 @@ npm run build
 ```
 npm run lint
 ```
+
+[![MEVN_ProjectManagementApp](https://github-readme-stats.vercel.app/api?username=aneguet&show_icons=true)](https://github.com/aneguet/MEVN_ProjectManagementApp)
