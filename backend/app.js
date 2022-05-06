@@ -63,8 +63,8 @@ app.get('/', (req, res) => {
 const todoRoutes = require('./routes/todo');
 app.use('/api/todos', todoRoutes);
 
-const authRoutes = require('./routes/auth');
-app.use('/api/user', authRoutes);
+const authRoutes = require('./routes/user');
+app.use('/api/users', authRoutes);
 
 // PORT
 const PORT = process.env.PORT || 4000;

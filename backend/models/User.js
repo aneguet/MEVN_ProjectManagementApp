@@ -1,5 +1,41 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
+/*
+{
+  D > "role": "admin"/"user",
+  * > "first_name":"John",
+  * > "last_name":"Doe",
+  * > "email":"xx@xx.xx",
+  * > "password":"xxxxx",
+  D > "phone": "50251081", --
+  D > "avatar":"http://link.com",
+  D > "registration_date":"2014-01-01T23:28:56.782Z",
+  D > "weekly_hours":38,
+  D > "assigned_projects":[
+      
+      {
+          D > "assigned_project_id":  1,
+          D > "project_roles": [
+              "Designer",
+              "Manager"
+          ],
+          D > "assigned_hours": 28
+          
+      },
+      {
+          "id":  2,
+          "project_roles": [
+              "Developer"
+          ],
+          "assigned_hours": 10
+         
+      }
+      ...
+  ]    
+}
+*/
+
 // If specified, must be an object with specific properties inside
 let AssignedProjectSchema = new Schema({
   assigned_project_id: { type: Number, required: false, default: 0 },
@@ -12,6 +48,7 @@ let AssignedProjectSchema = new Schema({
   ],
   assigned_hours: { type: Number, required: false, min: 0, default: 0 },
 });
+// USER
 let userSchema = new Schema({
   role: {
     type: String,
