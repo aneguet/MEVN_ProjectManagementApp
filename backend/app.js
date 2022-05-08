@@ -60,8 +60,8 @@ app.get('/', (req, res) => {
 });
 
 // Import and Use
-const todoRoutes = require('./routes/todo');
-app.use('/api/todos', todoRoutes);
+// const todoRoutes = require('./routes/todo');
+// app.use('/api/todos', todoRoutes);
 
 const authRoutes = require('./routes/user');
 app.use('/api/users', authRoutes);
