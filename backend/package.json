@@ -21,7 +21,8 @@
     "mongodb": "^4.5.0",
     "mongoose": "^6.2.7",
     "swagger-ui-express": "^4.3.0",
-    "yamljs": "^0.3.0"
+    "yamljs": "^0.3.0",
+    "nodemon": "^2.0.15"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
