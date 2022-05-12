@@ -1,33 +1,50 @@
 <template>
   <div id="app">
     <!-- Navigation bar -->
-    <NavComponent />
+    <NavComponent :user="user" @userstate="LogoutUser" />
 
     <!-- Home -->
-    <div class="auth-wrapper">
-      <div class="auth-inner">
-        <!-- We send the user to the children components (custom directive) -->
-        <router-view />
-      </div>
-    </div>
+
+    <!-- We send the user to the children components (custom directive) -->
+    <router-view :user="user" @userstate="GetUser" />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { ref, onMounted } from 'vue';
 import NavComponent from './components/NavComponent.vue';
 export default {
   name: 'App',
   components: { NavComponent },
-  async created() {
-    const res = await axios.get('/users/user', {
-      headers: {
-        'auth-token': localStorage.getItem('token'),
-      },
+  // We get the user in case they are logged in and we send it in router-view
+  setup() {
+    let user = ref();
+    const GetUser = async () => {
+      try {
+        await axios
+          .get('/users/user', {
+            headers: { 'auth-token': localStorage.getItem('token') },
+          })
+          .then((res) => {
+            console.log(res.data);
+            user.value = res.data;
+          });
+      } catch (err) {
+        console.log(err);
+        user.value = null;
+      }
+    };
+    const LogoutUser = () => {
+      // Set user state to null if they logout > this reloads the component
+      user.value = null;
+    };
+    if (localStorage.getItem('token')) GetUser(); // We only get the user if the user is logged in
+    onMounted(() => {
+      // When page is load we load the data
+      // GetUser();
     });
-    // this.user = res.data;
-    console.log(res.data);
-    this.$store.dispatch('user', res.data);
+    return { user, GetUser, LogoutUser };
   },
 };
 </script>
@@ -40,7 +57,8 @@ export default {
 }
 
 body {
-  background: #1c8ef9 !important;
+  // background: #fff !important;
+  background: #363885 !important;
   min-height: 100vh;
   display: flex;
   font-weight: 400;
@@ -76,7 +94,6 @@ html,
   display: flex;
   justify-content: center;
   flex-direction: column;
-  text-align: left;
 }
 .auth-inner {
   width: 450px;
@@ -91,7 +108,7 @@ html,
   margin-bottom: 1.5em;
 }
 .auth-wrapper .form-control:focus {
-  border-color: #167bff;
+  border-color: #363885;
   box-shadow: none;
 }
 .auth-wrapper h3 {
@@ -113,7 +130,7 @@ html,
   margin: 0;
 }
 .forgot-password a {
-  color: #167bff;
+  color: #363885;
 }
 /* Progress bar (loading data) */
 #nprogress .bar {

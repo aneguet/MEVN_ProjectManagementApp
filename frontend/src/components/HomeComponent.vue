@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <p class="text-center" v-if="user">Hi, {{ user.first_name }}</p>
-    <p class="text-center" v-if="!user">You are not logged in</p>
+  <div class="generic-card">
+    <div class="auth-wrapper">
+      <div class="auth-inner">
+        <p class="text-center" v-if="user">Hi, {{ user.first_name }}</p>
+        <p class="text-center" v-if="!user">You are not logged in</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
   name: 'HomeComponent',
-  computed: {
-    ...mapGetters(['user']), // Syntax to get the user getter
-  },
+  props: ['user'], // We retrieve the App.vue user prop
+  setup() {},
 };
 </script>
