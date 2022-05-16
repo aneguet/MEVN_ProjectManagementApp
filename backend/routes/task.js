@@ -17,7 +17,6 @@ const { isAdmin } = require('../validation/user_validation');
 
 // GET ALL Tasks by project · Project page
 router.get('/', [verifyToken, isAdmin], async (req, res) => {
-  //
   try {
     const tasks = await Task.find({});
     res.json(tasks);
