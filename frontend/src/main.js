@@ -14,6 +14,8 @@ import Dialog from 'primevue/dialog';
 import ToastService from 'primevue/toastservice';
 import Toast from 'primevue/toast';
 import Message from 'primevue/message';
+import Avatar from 'primevue/avatar';
+import AvatarGroup from 'primevue/avatargroup';
 // import 'primevue/resources/themes/lara-dark-purple/theme.css';
 import 'primevue/resources/primevue.min.css'; //core css
 import 'primeicons/primeicons.css'; //icons
@@ -73,4 +75,6 @@ app.component('Button', Button);
 app.component('Dialog', Dialog);
 app.component('Toast', Toast);
 app.component('Message', Message);
+app.component('Avatar', Avatar);
+app.component('AvatarGroup', AvatarGroup);
 app.mount('#app');

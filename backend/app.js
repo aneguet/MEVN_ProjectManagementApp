@@ -65,6 +65,12 @@ app.get('/', (req, res) => {
 
 const authRoutes = require('./routes/user');
 app.use('/api/users', authRoutes);
+const projectRoutes = require('./routes/project');
+app.use('/api/projects', projectRoutes);
+const taskRoutes = require('./routes/task');
+app.use('/api/tasks', taskRoutes);
+const technologyRoutes = require('./routes/technology');
+app.use('/api/technologies', technologyRoutes);
 
 // PORT
 const PORT = process.env.PORT || 4000;

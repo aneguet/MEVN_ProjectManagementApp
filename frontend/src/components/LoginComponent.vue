@@ -15,8 +15,8 @@
           class="p-fluid"
           autocomplete="off"
         >
-          <p class="logo-text">Welcome to Time Fly</p>
-          <h3>Login</h3>
+          <p class="logo-text">Welcome to Timefly</p>
+          <!-- <h3>Login</h3> -->
           <Message v-if="errors.message" severity="error" :closable="false">{{
             errors.message
           }}</Message>
@@ -87,9 +87,11 @@ export default {
       if (areFieldsValid()) {
         try {
           const res = await axios.post('/users/login', data);
-          console.log(res);
+          console.log(res.data.data);
           // Store user token in localStorage
           localStorage.setItem('token', res.data.data.token);
+          localStorage.setItem('role', res.data.data.user.role);
+          localStorage.setItem('avatar', res.data.data.user.avatar);
           // We send the state new state of the user as a custom event to the parent
           // Since props cannot be changed in child components
           emit('userstate', res.data.data.user);
@@ -138,10 +140,11 @@ export default {
   padding: 20px;
 }
 .logo-text {
-  font-size: 23px;
+  font-size: 31px;
   color: #323232;
-  margin-bottom: 1.3em;
+  margin-bottom: 0.5em;
   margin-top: 1px;
+  font-family: 'Damion', cursive;
 }
 
 .generic-card .card {

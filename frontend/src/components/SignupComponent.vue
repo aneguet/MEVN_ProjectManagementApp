@@ -17,7 +17,9 @@
           autocomplete="off"
         >
           <div class="p-inputtext-sm">
-            <h3>Sign Up</h3>
+            <!-- <h3>Sign Up</h3> -->
+            <p class="logo-text">Register to join us</p>
+
             <Message v-if="errors.message" severity="error" :closable="false">{{
               errors.message
             }}</Message>

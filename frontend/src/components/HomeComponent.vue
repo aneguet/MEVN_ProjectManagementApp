@@ -4,6 +4,7 @@
       <div class="auth-inner">
         <p class="text-center" v-if="user">Hi, {{ user.first_name }}</p>
         <p class="text-center" v-if="!user">You are not logged in</p>
+        <!-- <button><router-link to=></router-link></button> -->
       </div>
     </div>
   </div>

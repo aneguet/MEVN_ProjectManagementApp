@@ -4,8 +4,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 // Token authentication
-const { verifyToken, isAdmin, isADifferentUser } = require('../validation');
-const { registerValidation, loginValidation } = require('../validation');
+const {
+  verifyToken,
+  registerValidation,
+  loginValidation,
+} = require('../validation/auth_validation');
+const { isAdmin } = require('../validation/user_validation');
 
 // REGISTRATION-Create User · localhost/api/users/register
 router.post('/register', async (req, res) => {
@@ -31,6 +35,9 @@ router.post('/register', async (req, res) => {
     email: req.body.email,
     password,
     phone: req.body.phone ? req.body.phone : '123456',
+    assigned_projects: req.body.assigned_projects
+      ? req.body.assigned_projects
+      : [],
   });
   try {
     const savedUser = await userObject.save();
@@ -86,11 +93,25 @@ router.get('/', [verifyToken, isAdmin], async (req, res) => {
     res.status(500).send({ message: 'Error getting all the Users' });
   }
 });
-// GET User by ID · localhost/api/users/user · header params: auth-token
-router.get('/user', verifyToken, async (req, res) => {
+// GET User by its ID · For Login ONLY · localhost/api/users/user · header params: auth-token
+// It returns their info to the user requesting
+router.get('/userLogin', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    // const user = await User.findById(req.header('id')); We don't need the id, it's stored in the token
+    // We don't need to send the user id to the request, it's stored in the token
+    res.json(user);
+  } catch (err) {
+    res.status(500).send({ message: 'Error getting User' });
+  }
+});
+// GET User by ID · For admins · localhost/api/users/user · header params: auth-token
+// It returns their info to the user requesting
+// router.get('/user', [verifyToken, isAdmin], async (req, res) => {
+router.get('/user', [verifyToken, isAdmin], async (req, res) => {
+  try {
+    const userId = req.header('id');
+    const user = await User.findById(userId);
+    // We don't need to send the user id to the request, it's stored in the token
     res.json(user);
   } catch (err) {
     res.status(500).send({ message: 'Error getting User' });
@@ -126,31 +147,22 @@ router.put('/user', verifyToken, async (req, res) => {
   }
 });
 // DELETE User by ID · header params: auth-token, id
-router.delete(
-  '/user',
-  [verifyToken, isAdmin, isADifferentUser],
-  async (req, res) => {
-    try {
-      const userToDelete = await User.findByIdAndDelete(req.header('id'));
-      if (userToDelete) {
-        // res.json(userToDelete);
-        res.status(201).send({ message: 'User successfully deleted.' });
-      } else {
-        res
-          .status(404)
-          .send({ message: 'The User you want to delete does not exist' });
-      }
-    } catch (err) {
-      res.status(500).send({ message: 'Error deleting User' });
+router.delete('/user', verifyToken, async (req, res) => {
+  try {
+    const userToDelete = await User.findByIdAndDelete(req.header('id'));
+    if (userToDelete) {
+      // res.json(userToDelete);
+      res.status(201).send({ message: 'User successfully deleted.' });
+    } else {
+      res
+        .status(404)
+        .send({ message: 'The User you want to delete does not exist' });
     }
+  } catch (err) {
+    res.status(500).send({ message: 'Error deleting User' });
   }
-);
-// User LOGOUT
-router.post('/logout', (req, res) => {
-  res.send({
-    message: 'success',
-  });
 });
+
 // function mapUsersArray(arr) {
 //   let outputArr = arr.map((element) => ({
 //     id: element._id,

@@ -23,7 +23,7 @@ export default {
     const GetUser = async () => {
       try {
         await axios
-          .get('/users/user', {
+          .get('/users/userLogin', {
             headers: { 'auth-token': localStorage.getItem('token') },
           })
           .then((res) => {
@@ -39,10 +39,10 @@ export default {
       // Set user state to null if they logout > this reloads the component
       user.value = null;
     };
-    if (localStorage.getItem('token')) GetUser(); // We only get the user if the user is logged in
+    // if (localStorage.getItem('token')) GetUser(); // We only get the user if the user is logged in
     onMounted(() => {
       // When page is load we load the data
-      // GetUser();
+      GetUser();
     });
     return { user, GetUser, LogoutUser };
   },
@@ -57,12 +57,10 @@ export default {
 }
 
 body {
-  // background: #fff !important;
   background: #363885 !important;
   min-height: 100vh;
   display: flex;
   font-weight: 400;
-  font-family: 'Fira Sans', sans-serif;
 }
 h1,
 h2,
@@ -73,7 +71,6 @@ h6,
 label,
 span {
   font-weight: 500;
-  font-family: 'Fira Sans', sans-serif;
 }
 body,
 html,
@@ -86,10 +83,7 @@ html,
 #app {
   text-align: center;
 }
-.navbar-light {
-  background-color: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-}
+
 .auth-wrapper {
   display: flex;
   justify-content: center;
@@ -116,6 +110,28 @@ html,
   margin: 0;
   line-height: 1;
   padding-bottom: 20px;
+}
+/* Navbar */
+.nav-spacing {
+  padding: 0em 3em;
+}
+.navbar-light .navbar-brand {
+  // color: #f2b500;
+  font-size: 20px;
+  font-family: 'Damion', cursive;
+}
+@media (max-width: 768px) {
+  nav ul li {
+    text-align: left;
+  }
+}
+nav .avatar-style {
+  cursor: pointer;
+  margin-left: 10px;
+}
+nav ul li .button-padding {
+  //color: purple;
+  padding: 0.4em 0.7em !important;
 }
 /* Forms */
 .custom-control-label {
