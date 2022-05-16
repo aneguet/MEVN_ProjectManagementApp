@@ -1,21 +1,11 @@
 // Imports
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Project = require('../models/Project');
-const Task = require('../models/Task');
-const Technology = require('../models/Technology');
 // Token authentication
-const {
-  verifyToken,
-  registerValidation,
-  loginValidation,
-} = require('../validation/auth_validation');
+const { verifyToken } = require('../validation/auth_validation');
 const { isAdmin } = require('../validation/user_validation');
+const Task = require('../models/Task');
 
-// GET ALL Tasks by project and user id · User homepage
-
-// GET ALL Tasks by project · Project page
+// GET ALL Tasks · Admin
 router.get('/', [verifyToken, isAdmin], async (req, res) => {
   try {
     const tasks = await Task.find({});
@@ -24,10 +14,44 @@ router.get('/', [verifyToken, isAdmin], async (req, res) => {
     res.status(400).json({ error });
   }
 });
+// GET ALL Tasks by project and user id · User homepage
+
+router.get('/byProjectAndUser', verifyToken, async (req, res) => {
+  const projectId = req.header('id');
+  try {
+    const tasks = await Task.find({
+      project_id: projectId,
+      assigned_to: req.user.id,
+    });
+    res.json(tasks);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+});
+
+// GET ALL Tasks by project · Project page
+router.get('/byProject', verifyToken, async (req, res) => {
+  const projectId = req.header('id');
+  try {
+    const tasks = await Task.find({ project_id: projectId });
+    res.json(tasks);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+});
 // GET Task by task id
-
+router.get('/task', verifyToken, async (req, res) => {
+  const taskId = req.header('id');
+  try {
+    const tasks = await Task.find({
+      _id: taskId,
+    });
+    res.json(tasks);
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+});
 // CREATE Task
-
 router.post('/', verifyToken, async (req, res) => {
   try {
     const taskObject = new Task({
@@ -48,8 +72,47 @@ router.post('/', verifyToken, async (req, res) => {
 });
 
 // UPDATE Task
-
+router.put('/task', verifyToken, async (req, res) => {
+  const taskId = req.header('id');
+  let updatedTask = req.body;
+  try {
+    const taskToUpdate = await Task.findByIdAndUpdate(taskId, updatedTask);
+    if (taskToUpdate) {
+      res.json(updatedTask);
+    } else {
+      res
+        .status(404)
+        .send({ message: 'The task you want to update does not exist' });
+    }
+  } catch (err) {
+    res.status(500).send({ message: 'Error updating Project' });
+  }
+});
 // DELETE Task
-
+router.delete('/task', verifyToken, async (req, res) => {
+  try {
+    const taskToDelete = await Task.findByIdAndDelete(req.header('id'));
+    if (taskToDelete) {
+      res.json(taskToDelete);
+    } else {
+      res
+        .status(404)
+        .send({ message: 'The Task you want to delete does not exist' });
+    }
+  } catch (err) {
+    res.status(500).send({ message: 'Error deleting Project' });
+  }
+});
+// DELETE all tasks by project Id
+// const deleteTasksbyProjectId = async (projectId) => {
+//   try {
+//     await Task.deleteMany({
+//       project_id: projectId,
+//     });
+//   } catch (err) {
+//     return err;
+//   }
+// };
 // Routes export
+
 module.exports = router;

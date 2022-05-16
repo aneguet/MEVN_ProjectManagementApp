@@ -120,23 +120,20 @@ router.get('/user', [verifyToken, isAdmin], async (req, res) => {
 
 // UPDATE User by ID · header params: auth-token, id (user to get)
 router.put('/user', verifyToken, async (req, res) => {
+  if (req.body.password) {
+    // User changed password
+    // Hash password (with bcrypt)
+    const salt = await bcrypt.genSalt(10);
+    const password = await bcrypt.hash(req.body.password, salt);
+    req.body.password = password;
+  }
   try {
-    const defaultUser = {
-      role: 'user',
-      first_name: 'John',
-      last_name: 'Donut',
-      email: 'user2@gmail.com',
-      password: '123456',
-      phone: '50231935',
-    };
-    // FIXME switch array to req.body > user form in vue
-    // (req.header('id'), {$set: req.body,})
     const userToUpdate = await User.findByIdAndUpdate(
       req.header('id'),
-      defaultUser
+      req.body
     );
     if (userToUpdate) {
-      res.json(defaultUser);
+      res.json(req.body);
     } else {
       res
         .status(404)

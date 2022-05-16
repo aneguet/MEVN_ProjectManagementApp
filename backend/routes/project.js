@@ -1,10 +1,7 @@
 // Imports
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
 const Project = require('../models/Project');
 const Task = require('../models/Task');
-const Technology = require('../models/Technology');
 // Token authentication
 const { verifyToken } = require('../validation/auth_validation');
 const { isAdmin } = require('../validation/user_validation');
@@ -64,14 +61,14 @@ router.post('/', verifyToken, async (req, res) => {
   }
 });
 
-// UPDATE Project (only leaders and admins) · without techs and members
+// UPDATE Project (only leaders and admins)
 router.put(
   '/project',
   [verifyToken, isMemberLeaderOrAdmin],
   async (req, res) => {
     const projectId = req.header('id');
     let updatedProject = req.body;
-    updatedProject = checkMembersAndTechs(updatedProject);
+    // updatedProject = checkMembersAndTechs(updatedProject); > Update project without techs and members
 
     try {
       const projectToUpdate = await Project.findByIdAndUpdate(
@@ -91,27 +88,28 @@ router.put(
   }
 );
 
-// DELETE Project by ID (only leaders and admins)
-// FIXME DELETE project tasks as well ! > await Promise.all();
-router.delete(
-  '/project',
-  [verifyToken, isMemberLeaderOrAdmin],
-  async (req, res) => {
-    try {
-      const projectToDelete = await Project.findByIdAndDelete(req.header('id'));
-      if (projectToDelete) {
-        // res.json(projectToDelete);
-        res.status(201).send({ message: 'Project successfully deleted.' });
-      } else {
-        res
-          .status(404)
-          .send({ message: 'The Project you want to delete does not exist' });
-      }
-    } catch (err) {
-      res.status(500).send({ message: 'Error deleting Project' });
-    }
-  }
-);
+// DELETE Project by ID
+// It deletes the project and the project tasks
+router.delete('/project', verifyToken, (req, res) => {
+  let message_res = '';
+  Project.findByIdAndDelete(req.header('id'))
+    .then((data) => {
+      message_res = 'Project deleted';
+      if (!data) res.status(500).send({ message: 'Error deleting Project' });
+    })
+    .then(
+      Task.deleteMany({
+        project_id: req.header('id'),
+      }).then((data) => {
+        if (!data) res.status(500).send({ message: 'Error deleting Tasks' });
+        res.status(201).send({ message: message_res + ' and tasks deleted.' });
+      })
+    )
+    .catch((err) =>
+      res.status(500).send({ message: 'Error deleting Project' })
+    );
+});
+
 // Extra functions
 
 // sets project members: even if provided or not, it always sets the project leader as a member
@@ -132,17 +130,6 @@ let setMembers = (reqMembers, reqUserId) => {
     });
     return reqMembers;
   }
-};
-let checkMembersAndTechs = (updatedProject) => {
-  if (updatedProject.members) {
-    //user is trying to update members in the same request
-    delete updatedProject.members;
-  }
-  if (updatedProject.technologies) {
-    //user is trying to update technologies in the same request
-    delete updatedProject.technologies;
-  }
-  return updatedProject;
 };
 
 // More than one leader as member?
@@ -185,6 +172,17 @@ let checkMembersLeader = (members) => {
 //     res.status(500).send({ message: 'Error updating Project' });
 //   }
 // });
+// let checkMembersAndTechs = (updatedProject) => {
+//   if (updatedProject.members) {
+//     //user is trying to update members in the same request
+//     delete updatedProject.members;
+//   }
+//   if (updatedProject.technologies) {
+//     //user is trying to update technologies in the same request
+//     delete updatedProject.technologies;
+//   }
+//   return updatedProject;
+// };
 // DELETE Project member(s)
 // UPDATE Project technology(s)
 // DELETE Project technology(s)
