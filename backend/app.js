@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
   );
   next();
 });
-//
+
 app.use(bodyParser.json());
 
 // Connection to the database

@@ -148,7 +148,7 @@ nav ul li .button-padding {
 .forgot-password a {
   color: #363885;
 }
-/* Progress bar >(loading data) */
+/* Progress bar (loading data) */
 #nprogress .bar {
   background: red !important;
 }
