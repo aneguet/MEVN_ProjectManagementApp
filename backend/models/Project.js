@@ -72,7 +72,9 @@ let projectSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: false,
-        // autopopulate: { select: ['_id', 'first_name', 'last_name'] },
+        autopopulate: {
+          select: ['_id', 'first_name', 'last_name', 'email', 'avatar'],
+        },
       },
       project_roles: [{ type: String, required: false, min: 2, max: 255 }],
       assigned_hours: { type: Number, required: false, min: 0, default: 0 },
@@ -83,7 +85,7 @@ let projectSchema = new Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Technology',
       required: true,
-      // autopopulate: true,
+      autopopulate: true,
     },
   ],
   time_schedule: {

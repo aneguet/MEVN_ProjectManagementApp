@@ -10,7 +10,7 @@
             class="text-center"
           />
         </div>
-        <!-- '.prevent' Prevents page reload when submitting (PreventDefault method) -->
+        <!-- '.prevent' Prevents page reload when submitting > (PreventDefault method) -->
         <form
           @submit.prevent="handleSignUpSubmit"
           class="p-fluid"

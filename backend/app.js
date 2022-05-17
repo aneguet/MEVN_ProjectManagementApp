@@ -25,17 +25,17 @@ require('dotenv-flow').config(); // Imports the port settings
 app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   // If using js .fetch and not axios
-  res.header(
-    'Access-Control-Allow-Methods',
-    'GET,HEAD,OPTIONS,POST,PUT,DELETE'
-  );
+  // res.header(
+  //   'Access-Control-Allow-Methods',
+  //   'GET,HEAD,OPTIONS,POST,PUT,DELETE'
+  // );
   res.header(
     'Access-Control-Allow-Headers',
     'auth-token, Origin, X-Requested-With, Content-Type, Accept'
   );
   next();
 });
-//
+
 app.use(bodyParser.json());
 
 // Connection to the database
