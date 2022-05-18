@@ -53,7 +53,7 @@ let projectSchema = new Schema({
     min: 2,
     max: 255,
   },
-  stakeholders: {
+  stakeholder: {
     // *
     type: String,
     required: true,
@@ -63,7 +63,7 @@ let projectSchema = new Schema({
   leader: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    required: false,
     // autopopulate: { select: ['_id', 'first_name', 'last_name'] },
   },
   members: [

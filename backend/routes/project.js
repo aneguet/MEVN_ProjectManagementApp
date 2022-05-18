@@ -42,12 +42,12 @@ router.get('/project', verifyToken, async (req, res) => {
 
 // CREATE Project
 
-router.post('/', verifyToken, async (req, res) => {
+router.post('/project', verifyToken, async (req, res) => {
   try {
     const projectObject = new Project({
       name: req.body.name,
       description: req.body.description,
-      stakeholders: req.body.stakeholders,
+      stakeholder: req.body.stakeholder,
       leader: req.user.id, // We set the user creating the project as the leader
       members: setMembers(req.body.members, req.user.id),
       technologies: req.body.technologies,
@@ -55,7 +55,7 @@ router.post('/', verifyToken, async (req, res) => {
       // project_tasks: req.body.project_tasks ? req.body.project_tasks : [],
     });
     const savedProject = await projectObject.save();
-    res.json({ error: null, data: savedProject._id });
+    res.json(savedProject);
   } catch (error) {
     res.status(400).json({ error });
   }

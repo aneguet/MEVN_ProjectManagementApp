@@ -11,9 +11,9 @@ router.post('/', async (req, res) => {
       tech_name: req.body.tech_name,
     });
     const savedTech = await techObject.save();
-    res.json({ error: null, data: savedTech._id });
+    res.json({ savedTech });
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(500).json({ error });
   }
 });
 // GET ALL techs
@@ -22,7 +22,33 @@ router.get('/', async (req, res) => {
     const techs = await Technology.find({});
     res.json(techs);
   } catch (error) {
-    res.status(400).json({ error });
+    res.status(500).json({ error });
+  }
+});
+// GET tech by ID
+router.get('/technology', async (req, res) => {
+  const techId = req.header('id');
+  try {
+    const tech = await Technology.findOne({ _id: techId });
+    res.json(tech);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
+
+// DELETE tech by ID
+router.delete('/technology', async (req, res) => {
+  try {
+    const techToDelete = await Technology.findByIdAndDelete(req.header('id'));
+    if (techToDelete) {
+      res.json(techToDelete);
+    } else {
+      res
+        .status(404)
+        .send({ message: 'The Technology you want to delete does not exist' });
+    }
+  } catch (err) {
+    res.status(500).send({ message: 'Error deleting Technology' });
   }
 });
 // GET Project+techs

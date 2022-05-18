@@ -11,7 +11,7 @@ const {
 } = require('../validation/auth_validation');
 const { isAdmin } = require('../validation/user_validation');
 
-// REGISTRATION-Create User · localhost/api/users/register
+// * REGISTRATION-Create User · localhost/api/users/register
 router.post('/register', async (req, res) => {
   // validate user inputs
   const { error } = registerValidation(req.body);
@@ -47,7 +47,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// LOGIN · localhost/api/users/login
+// * LOGIN · localhost/api/users/login
 router.post('/login', async (req, res) => {
   // validate user inputs
   const { error } = loginValidation(req.body);
@@ -84,7 +84,7 @@ router.post('/login', async (req, res) => {
   });
 });
 // Admin requests
-// GET all Users · localhost/api/users/ · header params: auth-token
+// * GET all Users · localhost/api/users/ · header params: auth-token
 router.get('/', [verifyToken, isAdmin], async (req, res) => {
   try {
     const users = await User.find();
@@ -93,7 +93,7 @@ router.get('/', [verifyToken, isAdmin], async (req, res) => {
     res.status(500).send({ message: 'Error getting all the Users' });
   }
 });
-// GET User by its ID · For Login ONLY · localhost/api/users/user · header params: auth-token
+// * GET User by its ID · For Login ONLY · localhost/api/users/user · header params: auth-token
 // It returns their info to the user requesting
 router.get('/userLogin', verifyToken, async (req, res) => {
   try {
@@ -104,7 +104,7 @@ router.get('/userLogin', verifyToken, async (req, res) => {
     res.status(500).send({ message: 'Error getting User' });
   }
 });
-// GET User by ID · For admins · localhost/api/users/user · header params: auth-token
+// * GET User by ID · For admins · localhost/api/users/user · header params: auth-token
 // It returns their info to the user requesting
 // router.get('/user', [verifyToken, isAdmin], async (req, res) => {
 router.get('/user', [verifyToken, isAdmin], async (req, res) => {
@@ -118,7 +118,7 @@ router.get('/user', [verifyToken, isAdmin], async (req, res) => {
   }
 });
 
-// UPDATE User by ID · header params: auth-token, id (user to get)
+// * UPDATE User by ID · header params: auth-token, id (user to get)
 router.put('/user', verifyToken, async (req, res) => {
   if (req.body.password) {
     // User changed password
@@ -133,7 +133,7 @@ router.put('/user', verifyToken, async (req, res) => {
       req.body
     );
     if (userToUpdate) {
-      res.json(req.body);
+      res.json(userToUpdate);
     } else {
       res
         .status(404)
@@ -143,7 +143,7 @@ router.put('/user', verifyToken, async (req, res) => {
     res.status(500).send({ message: 'Error updating User' });
   }
 });
-// DELETE User by ID · header params: auth-token, id
+// * DELETE User by ID · header params: auth-token, id
 router.delete('/user', verifyToken, async (req, res) => {
   try {
     const userToDelete = await User.findByIdAndDelete(req.header('id'));

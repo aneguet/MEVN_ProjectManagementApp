@@ -43,16 +43,16 @@ router.get('/byProject', verifyToken, async (req, res) => {
 router.get('/task', verifyToken, async (req, res) => {
   const taskId = req.header('id');
   try {
-    const tasks = await Task.find({
+    const task = await Task.find({
       _id: taskId,
     });
-    res.json(tasks);
+    res.json(task);
   } catch (error) {
     res.status(400).json({ error });
   }
 });
 // CREATE Task
-router.post('/', verifyToken, async (req, res) => {
+router.post('/task', verifyToken, async (req, res) => {
   try {
     const taskObject = new Task({
       project_id: req.body.project_id,
@@ -60,12 +60,12 @@ router.post('/', verifyToken, async (req, res) => {
       description: req.body.description,
       // by default, tasks will be assigned to the leader, in case they don't pick another member
       assigned_to: req.body.assigned_to ? req.body.assigned_to : req.user.id,
-      hours_allocated: req.body.hours_allocated ? req.body.hours_allocated : 0,
+      hours_allocated: req.body.hours_allocated,
       hours_used: req.body.hours_used ? req.body.hours_used : 0,
       task_status: req.body.task_status ? req.body.task_status : 'Todo',
     });
     const savedTask = await taskObject.save();
-    res.json({ error: null, data: savedTask._id });
+    res.json(savedTask);
   } catch (error) {
     res.status(400).json({ error });
   }

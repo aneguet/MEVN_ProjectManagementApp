@@ -12,13 +12,13 @@ const swaggerDefinition = yaml.load('./swagger.yaml');
 // Creates express app
 const app = express();
 
-// app.use(
-//   '/api/docs',
-//   swaggerUi.serve,
-//   swaggerUi.setup(swaggerDefinition, {
-//     customSiteTitle: 'API · Project Management App',
-//   })
-// );
+app.use(
+  '/api/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDefinition, {
+    customSiteTitle: 'Timefly · API',
+  })
+);
 require('dotenv-flow').config(); // Imports the port settings
 
 // Handle CORS  (for Heroku to work) and Middleware
