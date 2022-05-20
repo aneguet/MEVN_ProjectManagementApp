@@ -1,16 +1,16 @@
-This project is based on the design and development of a project management application similar to Trello, KanBan or SCRUM.
+This project is based on the design and development of a project management application similar to Trello and JIRA.
 
 The project is layered into two parts:
 
 - Frontend: Vanilla Javascript combined with Vue 3, Bootstrap, PrimeVue and Axios.
-- Backend (API): MongoDB, Mongoose, ExpressJS, NodeJS and Swagger.
+- Backend (API): MongoDB, Mongoose, ExpressJS, NodeJS, Swagger and Autopopulate package.
 
 # Backend (API)
 
 ## Start server
 
 ```
-npm run start
+npm run start-dev
 ```
 
 ## Swagger

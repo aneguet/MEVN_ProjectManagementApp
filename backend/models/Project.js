@@ -64,7 +64,9 @@ let projectSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: false,
-    // autopopulate: { select: ['_id', 'first_name', 'last_name'] },
+    autopopulate: {
+      select: ['_id', 'first_name', 'last_name', 'email', 'avatar'],
+    },
   },
   members: [
     {

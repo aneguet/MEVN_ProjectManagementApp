@@ -1,50 +1,24 @@
 <template>
   <div id="app">
-    <!-- Navigation bar -->
-    <NavComponent :user="user" @userstate="LogoutUser" />
-
-    <!-- Home -->
-
-    <!-- We send the user to the children components (custom directive) -->
-    <router-view :user="user" @userstate="GetUser" />
+    <!-- Navigation bar: the key allows us to reload the navbar as well when pushing a specific route -->
+    <NavComponent :key="$route.fullPath" />
+    <div class="row">
+      <SidebarComponent v-if="isUserLoggedIn()" />
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import { ref, onMounted } from 'vue';
 import NavComponent from './components/NavComponent.vue';
+import SidebarComponent from './components/SidebarComponent.vue';
+import utils from './modules/utils';
 export default {
   name: 'App',
-  components: { NavComponent },
-  // We get the user in case they are logged in and we send it in router-view
+  components: { NavComponent, SidebarComponent },
   setup() {
-    let user = ref();
-    const GetUser = async () => {
-      try {
-        await axios
-          .get('/users/userLogin', {
-            headers: { 'auth-token': localStorage.getItem('token') },
-          })
-          .then((res) => {
-            console.log(res.data);
-            user.value = res.data;
-          });
-      } catch (err) {
-        console.log(err);
-        user.value = null;
-      }
-    };
-    const LogoutUser = () => {
-      // Set user state to null if they logout > this reloads the component
-      user.value = null;
-    };
-    // if (localStorage.getItem('token')) GetUser(); // We only get the user if the user is logged in
-    onMounted(() => {
-      // When page is load we load the data
-      GetUser();
-    });
-    return { user, GetUser, LogoutUser };
+    const { isUserLoggedIn } = utils();
+    return { isUserLoggedIn };
   },
 };
 </script>
@@ -62,6 +36,10 @@ body {
   display: flex;
   font-weight: 400;
 }
+* {
+  box-sizing: border-box;
+}
+
 h1,
 h2,
 h3,
@@ -72,44 +50,23 @@ label,
 span {
   font-weight: 500;
 }
-body,
-html,
-#app,
-#root,
-.auth-wrapper {
+// body,
+// html,
+// #app,
+// #root,
+// .auth-wrapper {
+//   width: 100%;
+//   height: 100%;
+// }
+// #app {
+//   text-align: center;
+// }
+#app {
   width: 100%;
   height: 100%;
 }
-#app {
-  text-align: center;
-}
-
-.auth-wrapper {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
-.auth-inner {
-  width: 450px;
-  margin: auto;
-  background: #ffffff;
-  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-  padding: 40px 55px 45px 55px;
-  border-radius: 15px;
-  transition: all 0.3s;
-}
-.auth-wrapper .form-control {
-  margin-bottom: 1.5em;
-}
-.auth-wrapper .form-control:focus {
-  border-color: #363885;
-  box-shadow: none;
-}
-.auth-wrapper h3 {
-  text-align: center;
-  margin: 0;
-  line-height: 1;
-  padding-bottom: 20px;
+.row {
+  width: 100%;
 }
 /* Navbar */
 .nav-spacing {

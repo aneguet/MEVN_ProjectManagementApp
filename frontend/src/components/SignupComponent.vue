@@ -1,6 +1,6 @@
 <template>
   <div class="generic-card">
-    <div class="auth-wrapper">
+    <div id="signup-block" class="auth-wrapper">
       <div class="auth-inner">
         <div>
           <img
@@ -204,3 +204,11 @@ export default {
   },
 };
 </script>
+<style>
+#signup-block.auth-wrapper {
+  margin-top: 4em;
+}
+#signup-block .auth-inner {
+  padding: 20px 45px 25px 45px;
+}
+</style>

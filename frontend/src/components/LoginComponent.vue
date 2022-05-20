@@ -1,6 +1,6 @@
 <template>
   <div class="generic-card">
-    <div class="auth-wrapper">
+    <div id="login-block" class="auth-wrapper">
       <div class="auth-inner">
         <div>
           <img
@@ -63,8 +63,7 @@ import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 export default {
   name: 'LoginComponent',
-  emits: ['userstate'],
-  setup(props, { emit }) {
+  setup() {
     const loginUser = reactive({
       email: '',
       password: '',
@@ -88,16 +87,13 @@ export default {
         try {
           const res = await axios.post('/users/login', data);
           console.log(res.data.data);
-          // Store user token in localStorage
+          // Store user token and other user fields in localStorage (we need them to be accessible in all the components and views)
           localStorage.setItem('token', res.data.data.token);
-          localStorage.setItem('role', res.data.data.user.role);
           localStorage.setItem('avatar', res.data.data.user.avatar);
-          // We send the state new state of the user as a custom event to the parent
-          // Since props cannot be changed in child components
-          emit('userstate', res.data.data.user);
+          localStorage.setItem('role', res.data.data.user.role);
 
           // Redirect to Home page
-          router.push({ path: '/' });
+          router.push('/');
         } catch (err) {
           errors.message = err.response ? err.response.data.error : err;
           console.log(errors);
@@ -130,6 +126,35 @@ export default {
 </script>
 
 <style>
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 8em;
+}
+.auth-inner {
+  width: 450px;
+  margin: auto;
+  background: #ffffff;
+  box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
+  padding: 40px 55px 45px 55px;
+  border-radius: 5px;
+  transition: all 0.3s;
+}
+.auth-wrapper .form-control {
+  margin-bottom: 1.5em;
+}
+.auth-wrapper .form-control:focus {
+  border-color: #363885;
+  box-shadow: none;
+}
+.auth-wrapper h3 {
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+  padding-bottom: 20px;
+}
 .generic-card {
   display: flex;
   align-items: center;
@@ -148,6 +173,7 @@ export default {
 }
 
 .generic-card .card {
+  /* signup and login forms size*/
   min-width: 450px;
 }
 

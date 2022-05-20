@@ -71,6 +71,8 @@ const taskRoutes = require('./routes/task');
 app.use('/api/tasks', taskRoutes);
 const technologyRoutes = require('./routes/technology');
 app.use('/api/technologies', technologyRoutes);
+const avatarRoutes = require('./routes/avatar');
+app.use('/api/avatars', avatarRoutes);
 
 // PORT
 const PORT = process.env.PORT || 4000;

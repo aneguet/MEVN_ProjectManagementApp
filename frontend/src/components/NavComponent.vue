@@ -6,12 +6,6 @@
         to="/"
         class="navbar-brand d-flex align-items-center logo-style"
       >
-        <!-- <img
-          src="../assets/logo.png"
-          alt="Logo of time fly that consists of a fly"
-          width="40"
-          class="text-center"
-        /> &nbsp;-->
         Timefly</router-link
       >
 
@@ -29,7 +23,8 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <!-- If the user is not logged in  -->
-        <ul class="navbar-nav ms-auto mb-2 mb-md-0" v-if="!user">
+
+        <ul class="navbar-nav ms-auto mb-2 mb-md-0" v-if="!isUserLoggedIn()">
           <li class="nav-item">
             <router-link to="/login" class="nav-link" aria-current="page"
               ><Button
@@ -51,11 +46,12 @@
           </li>
         </ul>
         <!--  If the user is logged in  -->
-        <ul class="navbar-nav ms-auto mb-2 mb-md-0" v-if="user">
+
+        <ul class="navbar-nav ms-auto mb-2 mb-md-0" v-else>
+          <!-- href="javascript:void(0)" -->
           <li class="nav-item">
             <Button
-              href="javascript:void(0)"
-              @click="handleLogoutClick"
+              @click="logoutUser"
               label="Logout"
               class="p-button-outlined nav-link p-button-sm button-padding"
               icon="pi pi-sign-out"
@@ -63,7 +59,7 @@
           </li>
           <li class="nav-item">
             <Avatar class="avatar-style" shape="circle">
-              <img :src="user.avatar" />
+              <img :src="avatar" to="/user" />
             </Avatar>
           </li>
         </ul>
@@ -74,23 +70,22 @@
 
 <script>
 import { useRouter } from 'vue-router';
+import utils from '../modules/utils';
 export default {
   name: 'NavComponent',
-  props: ['user'], // We retrieve the App.vue user prop
-  setup(props, { emit }) {
+
+  setup() {
     const router = useRouter();
-    const userAvatar = localStorage.getItem('avatar');
-    const handleLogoutClick = () => {
-      // Remove user token from localStorage
-      // localStorage.removeItem('token');
+    const { isUserLoggedIn } = utils();
+    const avatar = localStorage.getItem('avatar');
+    const logoutUser = () => {
+      localStorage.removeItem('token');
       localStorage.clear();
-      // Change value of user in store -----
-      emit('userstate', null);
-      // this.$store.dispatch('user', null);
       // Redirection to home
-      router.push({ path: '/' });
+      router.push('/login');
     };
-    return { handleLogoutClick, userAvatar };
+
+    return { logoutUser, isUserLoggedIn, avatar };
   },
 };
 </script>

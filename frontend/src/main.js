@@ -19,6 +19,12 @@ import AvatarGroup from 'primevue/avatargroup';
 // import 'primevue/resources/themes/lara-dark-purple/theme.css';
 import 'primevue/resources/primevue.min.css'; //core css
 import 'primeicons/primeicons.css'; //icons
+// Tables
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup'; //optional for column grouping
+import Row from 'primevue/row'; //optional for row
+import PanelMenu from 'primevue/panelmenu';
 
 // import 'primevue/resources/themes/bootstrap4-light-blue/theme.css';
 // import 'primevue/resources/themes/bootstrap4-light-purple/theme.css';
@@ -77,4 +83,9 @@ app.component('Toast', Toast);
 app.component('Message', Message);
 app.component('Avatar', Avatar);
 app.component('AvatarGroup', AvatarGroup);
+app.component('DataTable', DataTable);
+app.component('Column', Column);
+app.component('ColumnGroup', ColumnGroup);
+app.component('Row', Row);
+app.component('PanelMenu', PanelMenu);
 app.mount('#app');

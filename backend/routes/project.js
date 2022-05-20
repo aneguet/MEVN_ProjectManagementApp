@@ -94,15 +94,23 @@ router.delete('/project', verifyToken, (req, res) => {
   let message_res = '';
   Project.findByIdAndDelete(req.header('id'))
     .then((data) => {
-      message_res = 'Project deleted';
-      if (!data) res.status(500).send({ message: 'Error deleting Project' });
+      if (data) {
+        message_res = 'Project deleted';
+      } else {
+        res.status(500).send({ message: 'Error deleting Project' });
+      }
     })
     .then(
       Task.deleteMany({
         project_id: req.header('id'),
       }).then((data) => {
-        if (!data) res.status(500).send({ message: 'Error deleting Tasks' });
-        res.status(201).send({ message: message_res + ' and tasks deleted.' });
+        if (data) {
+          res
+            .status(201)
+            .send({ message: message_res + ' and tasks deleted.' });
+        } else {
+          res.status(500).send({ message: 'Error deleting Tasks' });
+        }
       })
     )
     .catch((err) =>
