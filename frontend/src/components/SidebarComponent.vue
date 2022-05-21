@@ -80,9 +80,6 @@ export default {
   width: 200px;
 }
 .lcolumn {
-  width: 212px;
-  height: auto;
-  margin-top: 56px;
-  background-color: #fff;
+  background-color: #d5d5d5;
 }
 </style>

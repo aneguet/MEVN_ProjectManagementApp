@@ -1,71 +1,44 @@
 <template>
-  <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
-    <div class="container-fluid nav-spacing">
-      <!-- Using router link instead of "a" links prevents reloading the page -->
+  <div id="navbar">
+    <div id="logo">
       <router-link
         to="/"
         class="navbar-brand d-flex align-items-center logo-style"
       >
         Timefly</router-link
       >
-
-      <!-- Toggle functionality -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarCollapse"
-        aria-controls="navbarCollapse"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <!-- If the user is not logged in  -->
-
-        <ul class="navbar-nav ms-auto mb-2 mb-md-0" v-if="!isUserLoggedIn()">
-          <li class="nav-item">
-            <router-link to="/login" class="nav-link" aria-current="page"
-              ><Button
-                class="p-button-outlined nav-link p-button-sm button-padding"
-                label="Login"
-              ></Button
-            ></router-link>
-            <!-- <router-link to="/login" class="nav-link" aria-current="page"
-              >Login</router-link
-            > -->
-          </li>
-          <li class="nav-item">
-            <router-link to="/signup" class="nav-link"
-              ><Button
-                class="p-button-outlined nav-link p-button-sm button-padding"
-                label="Sign Up"
-              ></Button
-            ></router-link>
-          </li>
-        </ul>
-        <!--  If the user is logged in  -->
-
-        <ul class="navbar-nav ms-auto mb-2 mb-md-0" v-else>
-          <!-- href="javascript:void(0)" -->
-          <li class="nav-item">
-            <Button
-              @click="logoutUser"
-              label="Logout"
-              class="p-button-outlined nav-link p-button-sm button-padding"
-              icon="pi pi-sign-out"
-            />
-          </li>
-          <li class="nav-item">
-            <Avatar class="avatar-style" shape="circle">
-              <img :src="avatar" to="/user" />
-            </Avatar>
-          </li>
-        </ul>
-      </div>
     </div>
-  </nav>
+    <div id="buttons">
+      <router-link
+        to="/login"
+        class="nav-link"
+        aria-current="page"
+        v-if="!isUserLoggedIn()"
+        ><Button
+          class="p-button-outlined nav-link p-button-sm button-padding"
+          label="Login"
+          id="login-btn"
+        ></Button
+      ></router-link>
+      <router-link to="/signup" class="nav-link" v-if="!isUserLoggedIn()"
+        ><Button
+          class="p-button-outlined nav-link p-button-sm button-padding"
+          label="Sign Up"
+          id="signup-btn"
+        ></Button
+      ></router-link>
+      <Button
+        @click="logoutUser"
+        v-if="isUserLoggedIn()"
+        label="Logout"
+        class="p-button-outlined nav-link p-button-sm button-padding"
+        icon="pi pi-sign-out"
+      />
+      <Avatar class="avatar-style" shape="circle" v-if="isUserLoggedIn()">
+        <img :src="avatar" to="/user" />
+      </Avatar>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -89,3 +62,32 @@ export default {
   },
 };
 </script>
+<style scoped>
+#navbar {
+  font-size: 20px;
+  font-family: 'Damion', cursive;
+  background-color: #efefef;
+  height: 60px;
+  padding: 0.5em 2em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#navbar #buttons {
+  align-items: center;
+  display: flex;
+}
+#navbar .avatar-style {
+  margin-left: 0.6em;
+}
+#navbar #signup-btn {
+  margin-left: 1em;
+}
+#navbar #logo a {
+  color: #272727;
+  font-size: 21px;
+}
+.p-panelmenu .p-panelmenu-header > a {
+  padding: 2em 1.25em;
+}
+</style>

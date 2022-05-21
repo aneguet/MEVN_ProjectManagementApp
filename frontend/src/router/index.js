@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LoginComponent from '../components/LoginComponent.vue';
 import SignupComponent from '../components/SignupComponent.vue';
-import TodoDetailView from '../views/TodoDetailView.vue';
-import TodoView from '../views/TodoView.vue';
 import AboutView from '../views/AboutView.vue';
 import UsersList from '../views/UsersList.vue';
 import UserSettings from '../views/UserSettings.vue';
@@ -12,6 +10,11 @@ import TasksList from '../views/TasksList.vue';
 // import { checkLoggedIn } from './navigationGuard';
 
 const routes = [
+  {
+    path: '/:catchAll(.*)', // Unrecognized path
+    redirect: '/',
+    beforeEnter: checkIfLoggedIn,
+  },
   {
     path: '/',
     name: 'home',
@@ -53,9 +56,6 @@ const routes = [
         ) {
           next();
         }
-        // else {
-        //   next('/');
-        // }
       },
     ],
   },
@@ -66,7 +66,7 @@ const routes = [
     beforeEnter: checkIfLoggedIn,
   },
   {
-    path: '/project',
+    path: '/project/:id',
     name: 'project',
     component: ProjectDetail,
     beforeEnter: checkIfLoggedIn,
@@ -96,28 +96,13 @@ const routes = [
         ) {
           next();
         }
-        // else {
-        //   next('/');
-        // }
       },
     ],
-  },
-  {
-    path: '/todos',
-    name: 'todos',
-    component: TodoView,
-    beforeEnter: checkIfLoggedIn,
   },
   {
     path: '/about',
     name: 'about',
     component: AboutView,
-    BeforeEnter: checkIfLoggedIn,
-  },
-  {
-    path: '/todo/:id',
-    name: 'todo single',
-    component: TodoDetailView,
     BeforeEnter: checkIfLoggedIn,
   },
 ];

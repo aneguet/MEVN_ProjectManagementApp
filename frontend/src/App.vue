@@ -35,6 +35,7 @@ body {
   min-height: 100vh;
   display: flex;
   font-weight: 400;
+  margin: 0px;
 }
 * {
   box-sizing: border-box;
@@ -67,29 +68,24 @@ span {
 }
 .row {
   width: 100%;
+  display: flex;
 }
-/* Navbar */
-.nav-spacing {
-  padding: 0em 3em;
+a:link {
+  text-decoration: none;
 }
-.navbar-light .navbar-brand {
-  // color: #f2b500;
-  font-size: 20px;
-  font-family: 'Damion', cursive;
+
+a:visited {
+  text-decoration: none;
 }
-@media (max-width: 768px) {
-  nav ul li {
-    text-align: left;
-  }
+
+a:hover {
+  text-decoration: none;
 }
-nav .avatar-style {
-  cursor: pointer;
-  margin-left: 10px;
+
+a:active {
+  text-decoration: none;
 }
-nav ul li .button-padding {
-  //color: purple;
-  padding: 0.4em 0.7em !important;
-}
+
 /* Forms */
 .custom-control-label {
   font-weight: 400;
@@ -104,16 +100,5 @@ nav ul li .button-padding {
 }
 .forgot-password a {
   color: #363885;
-}
-/* Progress bar (loading data) */
-#nprogress .bar {
-  background: red !important;
-}
-#nprogress .peg {
-  box-shadow: 0 0 10px red, 0 0 5px red !important;
-}
-#nprogress .spinner-icon {
-  border-top-color: red !important;
-  border-left-color: red !important;
 }
 </style>

@@ -26,13 +26,20 @@
             >
           </template>
         </Column>
+
         <Column header="Actions">
           <template #body="slotProps">
             <Button
               icon="pi pi-eye"
-              class="p-button-rounded p-button-success mx-2"
+              class="p-button-rounded p-button-info mx-2"
               @click="viewProject(slotProps.data._id)"
+            />&nbsp;
+            <Button
+              icon="pi pi-pencil"
+              class="p-button-rounded p-button-success mx-2"
+              @click="editProject(slotProps.data._id)"
             />
+            &nbsp;
             <Button
               icon="pi pi-trash"
               class="p-button-rounded p-button-danger"
@@ -50,27 +57,27 @@ import usercrud from '../modules/usercrud'; // composable(reusable)
 import projectcrud from '../modules/projectcrud'; // composable(reusable)
 import utils from '../modules/utils';
 import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 export default {
   name: 'HomeView',
   setup() {
+    const router = useRouter();
     const { user, GetUser } = usercrud();
     const { GetProjectsByUser, userProjects, GetAllProjects } = projectcrud();
     const { isUserLoggedIn, isUserAdmin } = utils();
-    // Table
-    const formatDate = (value) => {
-      return value.toLocaleDateString('en-US', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-      });
-    };
-    const viewProject = (data) => {
+
+    const viewProject = (projectId) => {
       // project id
-      console.log(data);
+      console.log(projectId);
+      router.push('/project/' + projectId);
     };
-    const deleteProject = (data) => {
+    const editProject = (projectId) => {
       // project id
-      console.log(data);
+      console.log(projectId);
+    };
+    const deleteProject = (projectId) => {
+      // project id
+      console.log(projectId);
     };
     onMounted(() => {
       // If user is logged in, we get the data
@@ -85,9 +92,9 @@ export default {
     return {
       user,
       userProjects,
-      formatDate,
       viewProject,
       deleteProject,
+      editProject,
     };
   },
 };
