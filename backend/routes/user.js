@@ -35,9 +35,9 @@ router.post('/register', async (req, res) => {
     email: req.body.email,
     password,
     phone: req.body.phone ? req.body.phone : '123456',
-    assigned_projects: req.body.assigned_projects
-      ? req.body.assigned_projects
-      : [],
+    // assigned_projects: req.body.assigned_projects
+    //   ? req.body.assigned_projects
+    //   : [],
   });
   try {
     const savedUser = await userObject.save();
@@ -83,9 +83,9 @@ router.post('/login', async (req, res) => {
     data: { token, user: userFound },
   });
 });
-// Admin requests
+
 // * GET all Users · localhost/api/users/ · header params: auth-token
-router.get('/', [verifyToken, isAdmin], async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -159,20 +159,5 @@ router.delete('/user', verifyToken, async (req, res) => {
     res.status(500).send({ message: 'Error deleting User' });
   }
 });
-
-// function mapUsersArray(arr) {
-//   let outputArr = arr.map((element) => ({
-//     id: element._id,
-//     role: element.role,
-//     first_name: element.first_name,
-//     last_name: element.last_name,
-//     email: element.email,
-//     password: element.password,
-//     phone: element.phone,
-//     uri: '/api/users/' + element._id,
-//   }));
-
-//   return outputArr;
-// }
 
 module.exports = router;

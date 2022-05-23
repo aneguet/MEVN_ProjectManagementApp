@@ -131,6 +131,12 @@ let setMembers = (reqMembers, reqUserId) => {
     });
     return auxArr;
   } else {
+    for (let i = 0; i < reqMembers.length; i++) {
+      // We set the default project role for every added member
+      reqMembers[i].project_roles = reqMembers[i].project_roles
+        ? reqMembers[i].project_roles
+        : ['Timefly member'];
+    }
     // The user picked at least one member
     reqMembers.push({
       member_id: reqUserId,

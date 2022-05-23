@@ -1,8 +1,10 @@
 import { ref, computed } from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+
 const getProjects = () => {
   const route = useRoute();
+  const router = useRouter();
   const userProjects = ref({});
   const projectLeader = ref({});
   const project = ref({});
@@ -12,6 +14,8 @@ const getProjects = () => {
   const projectId = computed(() => route.params.id);
   let projectState = ref('Ongoing');
   let projectStateClass = ref('info');
+  let requestError = ref('');
+  let newTaskProjectMembers = ref([]);
 
   const GetProjectState = () => {
     // We define the project state depending on the time schedule and the current date and time
@@ -28,7 +32,7 @@ const getProjects = () => {
       }
     }
   };
-  const setProjectStateClass = (projectState) => {
+  const SetProjectStateClass = (projectState) => {
     switch (projectState) {
       case 'Complete':
         projectStateClass.value = 'success';
@@ -42,7 +46,21 @@ const getProjects = () => {
       default:
         break;
     }
-    console.log(projectStateClass.value);
+  };
+  const CreateNewProject = async (data) => {
+    try {
+      await axios
+        .post('/projects/project', data, {
+          headers: { 'auth-token': localStorage.getItem('token') },
+        })
+        .then((res) => {
+          console.log(res.data);
+          router.push('/project/' + res.data._id);
+        });
+    } catch (err) {
+      console.log(err);
+      requestError.value = err;
+    }
   };
   const GetProjectsByUser = async () => {
     try {
@@ -85,6 +103,7 @@ const getProjects = () => {
         })
         .then((res) => {
           project.value = res.data;
+          console.log(res.data);
           // Save leader
           projectLeader.value = res.data.leader._id;
           // Save time schedule array
@@ -103,11 +122,21 @@ const getProjects = () => {
           GetProjectState();
         })
         .then(() => {
-          setProjectStateClass(projectState.value);
+          SetProjectStateClass(projectState.value);
+          SetNewTaskProjectMembers();
         });
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const SetNewTaskProjectMembers = () => {
+    let aux;
+    aux = project.value.members;
+    newTaskProjectMembers.value = aux.map((el) => ({
+      _id: el.member_id._id,
+      email: el.member_id.email,
+    }));
   };
 
   return {
@@ -122,6 +151,9 @@ const getProjects = () => {
     remainingHPercentage,
     projectState,
     projectStateClass,
+    CreateNewProject,
+    requestError,
+    newTaskProjectMembers,
   };
 };
 export default getProjects;

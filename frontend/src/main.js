@@ -8,14 +8,17 @@ import TurnOffAutocomplete from 'vue-turn-off-autocomplete';
 import PrimeVue from 'primevue/config';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
+import Textarea from 'primevue/textarea';
 import Password from 'primevue/password';
 import Dialog from 'primevue/dialog';
 import ProgressBar from 'primevue/progressbar';
 import ToastService from 'primevue/toastservice';
 import Toast from 'primevue/toast';
 import Message from 'primevue/message';
+import Toolbar from 'primevue/toolbar';
 import Avatar from 'primevue/avatar';
 import AvatarGroup from 'primevue/avatargroup';
+import Dropdown from 'primevue/dropdown';
 // import 'primevue/resources/themes/lara-dark-purple/theme.css';
 import 'primevue/resources/primevue.min.css'; //core css
 import 'primeicons/primeicons.css'; //icons
@@ -29,7 +32,13 @@ import Fieldset from 'primevue/fieldset';
 import Panel from 'primevue/panel';
 import Chip from 'primevue/chip';
 import Tag from 'primevue/tag';
-
+import Card from 'primevue/card';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import PickList from 'primevue/picklist';
+import Calendar from 'primevue/calendar';
+import InputNumber from 'primevue/inputnumber';
+import ScrollTop from 'primevue/scrolltop';
 // Tested
 // import 'primevue/resources/themes/md-light-deeppurple/theme.css';
 // import 'primevue/resources/themes/bootstrap4-dark-purple/theme.css';
@@ -86,6 +95,7 @@ app.use(ToastService);
 
 app.use(TurnOffAutocomplete);
 app.component('InputText', InputText);
+app.component('Textarea', Textarea);
 app.component('Password', Password);
 app.component('Button', Button);
 app.component('Dialog', Dialog);
@@ -102,5 +112,14 @@ app.component('PanelMenu', PanelMenu);
 app.component('Fieldset', Fieldset);
 app.component('ProgressBar', ProgressBar);
 app.component('Chip', Chip);
+app.component('Card', Card);
+app.component('TabView', TabView);
+app.component('TabPanel', TabPanel);
+app.component('Toolbar', Toolbar);
+app.component('Dropdown', Dropdown);
+app.component('PickList', PickList);
+app.component('Calendar', Calendar);
+app.component('ScrollTop', ScrollTop);
+app.component('InputNumber', InputNumber);
 app.component('Tag', Tag);
 app.mount('#app');

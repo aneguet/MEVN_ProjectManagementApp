@@ -48,7 +48,7 @@ components:
           example: '2014-01-01T23:28:56.782Z'
         weekly_hours:
           type: number
-          default: 0
+          default: 35
     Project:
       type: object
       required:
@@ -80,6 +80,7 @@ components:
                 type: array
                 items:
                   type: string
+                  default: 'Timefly member'
                   example: 'Designer'
               assigned_hours:
                 type: number
@@ -231,7 +232,7 @@ paths:
                     type: string
   /users:
     get:
-      summary: Get all users (Admin functionality)
+      summary: Get all users
       tags:
         - User
       security:
@@ -263,15 +264,6 @@ paths:
                     type: string
         401:
           description: Access denied
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-        403:
-          description: This request requires an Admin role
           content:
             application/json:
               schema:

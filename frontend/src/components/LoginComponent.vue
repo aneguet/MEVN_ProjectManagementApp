@@ -89,7 +89,9 @@ export default {
           console.log(res.data.data);
           // Store user token and other user fields in localStorage (we need them to be accessible in all the components and views)
           localStorage.setItem('token', res.data.data.token);
+          localStorage.setItem('user_id', res.data.data.user._id);
           localStorage.setItem('avatar', res.data.data.user.avatar);
+          localStorage.setItem('email', res.data.data.user.email);
           localStorage.setItem('role', res.data.data.user.role);
 
           // Redirect to Home page

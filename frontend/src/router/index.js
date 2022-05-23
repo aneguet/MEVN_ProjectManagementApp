@@ -2,12 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import LoginComponent from '../components/LoginComponent.vue';
 import SignupComponent from '../components/SignupComponent.vue';
-import AboutView from '../views/AboutView.vue';
 import UsersList from '../views/UsersList.vue';
 import UserSettings from '../views/UserSettings.vue';
 import ProjectDetail from '../views/ProjectDetail.vue';
-import TasksList from '../views/TasksList.vue';
-// import { checkLoggedIn } from './navigationGuard';
+import NewProject from '../views/NewProject.vue';
+import NewTask from '../views/NewTask.vue';
 
 const routes = [
   {
@@ -54,6 +53,7 @@ const routes = [
           localStorage.getItem('role') !== undefined &&
           localStorage.getItem('role') == 'admin'
         ) {
+          // Thank you
           next();
         }
       },
@@ -72,38 +72,16 @@ const routes = [
     beforeEnter: checkIfLoggedIn,
   },
   {
-    path: '/tasks',
-    name: 'tasks',
-    component: TasksList,
-    beforeEnter: [
-      function (from, to, next) {
-        // check if user is logged in
-        if (
-          localStorage.getItem('token') !== null &&
-          localStorage.getItem('token') !== undefined
-        ) {
-          next();
-        } else {
-          next('/login');
-        }
-      },
-      function (from, to, next) {
-        // check if user is admin
-        if (
-          localStorage.getItem('role') !== null &&
-          localStorage.getItem('role') !== undefined &&
-          localStorage.getItem('role') == 'admin'
-        ) {
-          next();
-        }
-      },
-    ],
+    path: '/project/new',
+    name: 'new project',
+    component: NewProject,
+    beforeEnter: checkIfLoggedIn,
   },
   {
-    path: '/about',
-    name: 'about',
-    component: AboutView,
-    BeforeEnter: checkIfLoggedIn,
+    path: '/project/newTask/:id',
+    name: 'new task',
+    component: NewTask,
+    // beforeEnter: checkIfLoggedIn,
   },
 ];
 

@@ -19,7 +19,6 @@
           <div class="p-inputtext-sm">
             <!-- <h3>Sign Up</h3> -->
             <p class="logo-text">Register to join us</p>
-
             <Message v-if="errors.message" severity="error" :closable="false">{{
               errors.message
             }}</Message>
@@ -109,6 +108,7 @@
 import axios from 'axios';
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
+
 export default {
   name: 'SignupComponent',
   setup() {
@@ -148,7 +148,9 @@ export default {
           //Successful Signup > Redirection to login page
           router.push({ path: '/login' });
         } catch (err) {
-          errors.message = err.response ? err.response.data.error : err;
+          errors.message = err.response.data.error.message
+            ? err.response.data.error.message
+            : err;
         }
       }
     };
@@ -195,6 +197,7 @@ export default {
         return true;
       }
     };
+
     return {
       signupUser,
       errors,

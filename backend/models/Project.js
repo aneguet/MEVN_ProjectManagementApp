@@ -73,12 +73,20 @@ let projectSchema = new Schema({
       member_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: false,
+        required: true,
         autopopulate: {
           select: ['_id', 'first_name', 'last_name', 'email', 'avatar'],
         },
       },
-      project_roles: [{ type: String, required: false, min: 2, max: 255 }],
+      project_roles: [
+        {
+          type: String,
+          required: false,
+          min: 2,
+          max: 255,
+          default: 'Timefly member',
+        },
+      ],
       assigned_hours: { type: Number, required: false, min: 0, default: 0 },
     },
   ],

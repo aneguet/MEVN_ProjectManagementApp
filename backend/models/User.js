@@ -48,7 +48,7 @@ let userSchema = new Schema({
     default: 'https://i.imgur.com/e5YmXMB.png',
   },
   registration_date: { type: Date, required: false, default: Date.now },
-  weekly_hours: { type: Number, required: false, min: 0, default: 0 }, // Number type includes decimals
+  weekly_hours: { type: Number, required: false, min: 0, default: 35 }, // Number type includes decimals
   // assigned_projects: [
   //   {
   //     project: {

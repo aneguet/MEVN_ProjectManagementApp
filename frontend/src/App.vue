@@ -2,20 +2,17 @@
   <div id="app">
     <!-- Navigation bar: the key allows us to reload the navbar as well when pushing a specific route -->
     <NavComponent :key="$route.fullPath" />
-    <div class="row">
-      <SidebarComponent v-if="isUserLoggedIn()" />
-      <router-view />
-    </div>
+    <ScrollTop />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import NavComponent from './components/NavComponent.vue';
-import SidebarComponent from './components/SidebarComponent.vue';
 import utils from './modules/utils';
 export default {
   name: 'App',
-  components: { NavComponent, SidebarComponent },
+  components: { NavComponent },
   setup() {
     const { isUserLoggedIn } = utils();
     return { isUserLoggedIn };
@@ -36,6 +33,8 @@ body {
   display: flex;
   font-weight: 400;
   margin: 0px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 * {
   box-sizing: border-box;
@@ -51,17 +50,30 @@ label,
 span {
   font-weight: 500;
 }
-// body,
-// html,
-// #app,
-// #root,
-// .auth-wrapper {
-//   width: 100%;
-//   height: 100%;
-// }
-// #app {
-//   text-align: center;
-// }
+// Sidebar
+#sidebar-main {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+#sidebar .p-panelmenu {
+  width: 22rem;
+}
+
+#sidebar .p-panelmenu.p-component,
+#sidebar .p-panelmenu-panel {
+  /* height: 100vh; */
+  background-color: white;
+  width: 200px;
+}
+.lcolumn {
+  background-color: #d5d5d5;
+}
+a.p-panelmenu-header-link {
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+}
+//
 #app {
   width: 100%;
   height: 100%;
@@ -69,6 +81,16 @@ span {
 .row {
   width: 100%;
   display: flex;
+}
+// Pages title
+#page-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#page-title p {
+  color: white;
+  font-size: 20px;
 }
 a:link {
   text-decoration: none;

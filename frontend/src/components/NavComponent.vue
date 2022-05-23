@@ -27,6 +27,13 @@
           id="signup-btn"
         ></Button
       ></router-link>
+
+      <Chip
+        v-if="isUserLoggedIn()"
+        :label="email"
+        :image="avatar"
+        class="mr-2 mb-2 avatar-style"
+      />
       <Button
         @click="logoutUser"
         v-if="isUserLoggedIn()"
@@ -34,9 +41,9 @@
         class="p-button-outlined nav-link p-button-sm button-padding"
         icon="pi pi-sign-out"
       />
-      <Avatar class="avatar-style" shape="circle" v-if="isUserLoggedIn()">
+      <!-- <Avatar class="avatar-style" shape="circle" v-if="isUserLoggedIn()">
         <img :src="avatar" to="/user" />
-      </Avatar>
+      </Avatar> -->
     </div>
   </div>
 </template>
@@ -51,6 +58,7 @@ export default {
     const router = useRouter();
     const { isUserLoggedIn } = utils();
     const avatar = localStorage.getItem('avatar');
+    const email = localStorage.getItem('email');
     const logoutUser = () => {
       localStorage.removeItem('token');
       localStorage.clear();
@@ -58,7 +66,7 @@ export default {
       router.push('/login');
     };
 
-    return { logoutUser, isUserLoggedIn, avatar };
+    return { logoutUser, isUserLoggedIn, avatar, email };
   },
 };
 </script>
@@ -78,7 +86,7 @@ export default {
   display: flex;
 }
 #navbar .avatar-style {
-  margin-left: 0.6em;
+  margin-right: 0.6em;
 }
 #navbar #signup-btn {
   margin-left: 1em;
