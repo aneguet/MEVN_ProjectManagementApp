@@ -6,7 +6,9 @@ import UsersList from '../views/UsersList.vue';
 import UserSettings from '../views/UserSettings.vue';
 import ProjectDetail from '../views/ProjectDetail.vue';
 import NewProject from '../views/NewProject.vue';
+import EditProject from '../views/EditProject.vue';
 import NewTask from '../views/NewTask.vue';
+import EditTask from '../views/EditTask.vue';
 
 const routes = [
   {
@@ -78,10 +80,22 @@ const routes = [
     beforeEnter: checkIfLoggedIn,
   },
   {
+    path: '/project/edit/:id',
+    name: 'edit project',
+    component: EditProject,
+    beforeEnter: checkIfLoggedIn,
+  },
+  {
     path: '/project/newTask/:id',
     name: 'new task',
     component: NewTask,
-    // beforeEnter: checkIfLoggedIn,
+    beforeEnter: checkIfLoggedIn,
+  },
+  {
+    path: '/project/editTask/:id',
+    name: 'edit task',
+    component: EditTask,
+    beforeEnter: checkIfLoggedIn,
   },
 ];
 

@@ -5,13 +5,12 @@
       <PanelMenu :model="items" />
     </div>
     <div class="rcolumn">
-      <Toast />
       <!-- <div id="page-title">
-        <p>New Task</p>
+        <p>Edit Task</p>
       </div> -->
       <div id="project-form-section" class="mt1">
         <form
-          @submit.prevent="handleNewTaskSubmit"
+          @submit.prevent="handleEditTaskSubmit"
           class="p-fluid"
           autocomplete="off"
         >
@@ -19,24 +18,30 @@
             errors.message
           }}</Message>
           <!-- Name, Description and Stakeholder -->
-          <Panel header="New task" class="mb1" id="new-task-form">
+          <Panel header="Edit task" class="mb1" id="new-task-form">
             <div id="new-task-section1" class="formgrid grid flex">
               <!-- Name -->
-              <div class="field col mr2">
-                <label for="name">Name *</label>
+              <div v-for="t in task" :key="t.name" class="field col mr2">
+                <p v-if="t.name">
+                  <i>{{ t.name }}</i>
+                </p>
+                <label for="name">Name </label>
                 <InputText
                   id="name"
                   type="text"
-                  v-model="newTask.name"
+                  v-model="editTask.name"
                   :class="{ 'p-invalid': errors.name && submitted }"
                 />
               </div>
               <!-- Description -->
-              <div class="field col mr2">
-                <label for="description">Description *</label>
+              <div v-for="t in task" :key="t.description" class="field col mr2">
+                <p v-if="t.description">
+                  <i>{{ t.description }}</i>
+                </p>
+                <label for="description">Description </label>
                 <Textarea
                   id="description"
-                  v-model="newTask.description"
+                  v-model="editTask.description"
                   :autoResize="true"
                   rows="1"
                   cols="30"
@@ -46,47 +51,50 @@
             </div>
             <div id="new-task-section2" class="formgrid grid flex">
               <!-- Assigned to -->
-              <div class="field col mr2">
-                <label for="assigned_to">Assigned to *</label>
+              <div v-for="t in task" :key="t.assigned_to" class="field col mr2">
+                <p v-if="t.assigned_to && editTaskMembers">
+                  <i>{{ getUserEmail(t.assigned_to, editTaskMembers) }}</i>
+                </p>
+                <label for="assigned_to">Assigned to </label>
                 <Dropdown
-                  v-model="newTask.assigned_to"
-                  :options="newTaskProjectMembers"
+                  v-model="editTask.assigned_to"
+                  :options="editTaskMembers"
                   optionLabel="email"
                   :class="{ 'p-invalid': errors.task_status && submitted }"
                 />
-                <!-- <InputText
-                  id="assigned_to"
-                  type="text"
-                  v-model="newTask.assigned_to"
-                  :class="{ 'p-invalid': errors.assigned_to && submitted }"
-                /> -->
               </div>
 
               <br />
-              <!-- Hours allocated -->
-              <div class="field col mr2">
-                <label for="hours_allocated">Hours Allocated *</label>
+              <!-- Hours used -->
+              <div v-for="t in task" :key="t.hours_used" class="field col mr2">
+                <p v-if="t.hours_used != undefined && t.hours_used != null">
+                  <i>{{ t.hours_used }}</i>
+                </p>
+                <label for="hours_used">Hours Used </label>
                 <InputNumber
-                  id="hours_allocated"
-                  v-model="newTask.hours_allocated"
+                  id="hours_used"
+                  v-model="editTask.hours_used"
                   :class="{
-                    'p-invalid': errors.hours_allocated && submitted,
+                    'p-invalid': errors.hours_used && submitted,
                   }"
                 />
               </div>
 
               <!-- Task status -->
-              <div class="field col">
-                <label for="task_status">Task status *</label>
+              <div v-for="t in task" :key="t.task_status" class="field col">
+                <p v-if="t.task_status">
+                  <i>{{ t.task_status }}</i>
+                </p>
+                <label for="task_status">Task status </label>
                 <Dropdown
-                  v-model="newTask.task_status"
+                  v-model="editTask.task_status"
                   :options="taskStatus"
                   optionLabel="desc"
                   :class="{ 'p-invalid': errors.task_status && submitted }"
                 />
               </div>
             </div>
-            <div class="field col mt-auto" id="new-task-submit-section">
+            <div class="field col mt-auto" id="edit-task-submit-section">
               <Button
                 type="submit"
                 label="Submit"
@@ -102,96 +110,86 @@
 
 <script>
 import utils from '../modules/utils';
-import projectcrud from '../modules/projectcrud';
 import taskcrud from '../modules/taskcrud';
 import { reactive, ref, onMounted } from 'vue';
 export default {
-  name: 'NewTask',
+  name: 'EditTask',
   setup() {
-    const { GetProjectById, newTaskProjectMembers } = projectcrud(); //projectId send in the task request
-    const { requestError, CreateNewTask } = taskcrud();
+    const { requestError, GetTaskByTaskId, task, editTaskMembers, EditTask } =
+      taskcrud();
     const taskStatus = [
       { id: 'todo', desc: 'Todo' },
       { id: 'doing', desc: 'Doing' },
       { id: 'done', desc: 'Done' },
     ];
     const { isUserAdmin } = utils();
-    const newTask = reactive({
+    const editTask = reactive({
       name: '',
       description: '',
       assigned_to: '',
-      hours_allocated: '',
-      task_status: 'todo',
+      hours_used: '',
+      task_status: '',
     });
     const errors = reactive({
       name: '',
       description: '',
       assigned_to: '',
-      hours_allocated: '',
+      hours_used: '',
       task_status: '',
       message: '',
     });
     const submitted = ref(false);
 
-    onMounted(() => {
-      GetProjectById(); // The project will give us back the project members
-    });
-
-    const handleNewTaskSubmit = async () => {
+    GetTaskByTaskId(); // The project will give us back the project members
+    // console.log(project.value);
+    onMounted(() => {});
+    const getUserEmail = (user_id, members) => {
+      let user_email = '';
+      for (let i = 0; i < members.length; i++) {
+        if (user_id === members[i]._id) {
+          user_email = members[i].email;
+        }
+      }
+      return user_email;
+    };
+    const handleEditTaskSubmit = async () => {
       resetErrors();
       submitted.value = true;
-      if (areFieldsValid()) {
-        console.log(newTask);
-        let data = {
-          assigned_to: newTask.assigned_to._id,
-          description: newTask.description,
-          hours_allocated: newTask.hours_allocated,
-          name: newTask.name,
-          task_status: newTask.task_status.desc,
-        };
-
-        CreateNewTask(data);
-        if (requestError) errors.message = requestError;
+      const taskToUpdate = prepareTaskToUpdate();
+      console.log(taskToUpdate);
+      EditTask(taskToUpdate);
+      if (requestError) errors.message = requestError;
+    };
+    const prepareTaskToUpdate = () => {
+      let data = {};
+      data.project_id = task.value[0].project_id;
+      if (editTask.name && editTask.name != '') {
+        data.name = editTask.name;
       }
+      if (editTask.description && editTask.description != '') {
+        data.description = editTask.description;
+      }
+      if (editTask.assigned_to && editTask.assigned_to != '') {
+        data.assigned_to = editTask.assigned_to._id;
+      }
+
+      if (editTask.hours_used && editTask.hours_used != '') {
+        data.hours_used = editTask.hours_used;
+      }
+      if (editTask.task_status && editTask.task_status != '') {
+        data.task_status = editTask.task_status.desc;
+      }
+
+      return data;
     };
     const resetErrors = () => {
       (errors.name = ''),
         (errors.description = ''),
         (errors.assigned_to = ''),
-        (errors.hours_allocated = ''),
+        (errors.hours_used = ''),
         (errors.task_status = ''),
         (errors.message = '');
       submitted.value = false;
-    };
-
-    let areFieldsValid = () => {
-      if (!newTask.name || newTask.name == '') {
-        errors.name = 'Name cannot be empty';
-        errors.message = errors.name;
-        return false;
-      } else if (!newTask.description || newTask.description == '') {
-        errors.description = 'Description cannot be empty';
-        errors.message = errors.description;
-        return false;
-      } else if (!newTask.assigned_to || newTask.assigned_to == '') {
-        errors.assigned_to = 'Assigned member cannot be empty';
-        errors.message = errors.assigned_to;
-        return false;
-      } else if (newTask.hours_allocated == '') {
-        errors.hours_allocated = 'Hours allocated cannot be empty';
-        errors.message = errors.hours_allocated;
-        return false;
-      } else if (newTask.hours_allocated <= 0) {
-        errors.hours_allocated = 'Hours allocated must be greater than 0';
-        errors.message = errors.hours_allocated;
-        return false;
-      } else if (!newTask.task_status || newTask.task_status == '') {
-        errors.task_status = 'Task status cannot be empty';
-        errors.message = errors.task_status;
-        return false;
-      } else {
-        return true;
-      }
     };
 
     // Menu
@@ -216,28 +214,30 @@ export default {
 
     return {
       items,
-      newTask,
-      handleNewTaskSubmit,
+      editTask,
+      handleEditTaskSubmit,
       errors,
       submitted,
-      newTaskProjectMembers,
+      editTaskMembers,
       taskStatus,
+      task,
+      getUserEmail,
     };
   },
 };
 </script>
 
 <style scoped>
-#new-task-section1,
-#new-task-section2 {
+#edit-task-section1,
+#edit-task-section2 {
   display: flex;
   justify-content: center;
 }
-#new-task-section1 {
+#edit-task-section1 {
   margin-top: 4em;
   margin-bottom: 1em;
 }
-#new-task-section2 {
+#edit-task-section2 {
   margin-bottom: 2em;
 }
 .mr1 {
@@ -265,11 +265,12 @@ export default {
 .error-text {
   color: red;
 }
-#new-task-submit-section {
+#edit-task-submit-section {
   text-align: center;
+  margin-top: 1.5em;
   margin-bottom: 2em;
 }
-#new-task-submit-section button {
+#edit-task-submit-section button {
   width: 30%;
 }
 </style>

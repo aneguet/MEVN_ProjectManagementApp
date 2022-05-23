@@ -29,6 +29,7 @@ router.post('/register', async (req, res) => {
   // Create user object and save
   // The properties not defined here have default values defined in the model, so they will be inserted as well
   const userObject = new User({
+    avatar: req.body.avatar,
     role: req.body.role ? req.body.role : 'user',
     first_name: req.body.first_name,
     last_name: req.body.last_name,

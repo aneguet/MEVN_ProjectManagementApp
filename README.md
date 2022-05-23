@@ -2,7 +2,7 @@ This project is based on the design and development of a project management appl
 
 The project is layered into two parts:
 
-- Frontend: Vanilla Javascript combined with Vue 3, Bootstrap, PrimeVue and Axios.
+- Frontend: Vanilla Javascript combined with Vue 3, Bootstrap, PrimeVue, Axios and Moment package.
 - Backend (API): MongoDB, Mongoose, ExpressJS, NodeJS, Swagger and Autopopulate package.
 
 # Backend (API)

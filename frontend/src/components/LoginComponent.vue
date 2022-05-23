@@ -39,7 +39,6 @@
             <div class="p-float-label">
               <Password
                 id="password"
-                type="password"
                 v-model="loginUser.password"
                 :class="{ 'p-invalid': errors.password && submitted }"
                 autocomplete="off"
@@ -190,5 +189,8 @@ form .submit-btn {
   .card {
     width: 80%;
   }
+}
+#login-block {
+  margin-top: 3.5em;
 }
 </style>

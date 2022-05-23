@@ -1,5 +1,6 @@
 <template>
   <div class="generic-card">
+    <Toast />
     <div id="signup-block" class="auth-wrapper">
       <div class="auth-inner">
         <div>
@@ -69,12 +70,10 @@
               <div class="p-float-label">
                 <Password
                   id="password"
-                  type="password"
                   v-model="signupUser.password"
                   toggleMask
                   :class="{ 'p-invalid': errors.password && submitted }"
                   autocomplete="off"
-                  :feedback="false"
                 >
                 </Password>
                 <label for="password">Password*</label>
@@ -85,7 +84,6 @@
               <div class="p-float-label">
                 <Password
                   id="password_confirm"
-                  type="password"
                   v-model="signupUser.password_confirm"
                   toggleMask
                   :class="{ 'p-invalid': errors.password_confirm && submitted }"
@@ -108,7 +106,7 @@
 import axios from 'axios';
 import { ref, reactive } from 'vue';
 import { useRouter } from 'vue-router';
-
+import { useToast } from 'primevue/usetoast';
 export default {
   name: 'SignupComponent',
   setup() {
@@ -127,12 +125,35 @@ export default {
       password_confirm: '',
       message: '',
     });
+    const toast = useToast();
     const submitted = ref(false);
     const router = useRouter();
+    const avatarLink = ref('');
+    // Get all users
+    const GetRandomAvatar = async () => {
+      try {
+        await axios.get('/avatars/randomAvatar').then((res) => {
+          // console.log(res.data);
+          avatarLink.value = res.data.img_link;
+          console.log(avatarLink.value);
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    GetRandomAvatar(); // we get a random avatar to set to the user when they sign up
+    const showToastMessage = () => {
+      toast.add({
+        severity: 'success',
+        summary: 'User successfully created',
+        life: 3000,
+      });
+    };
     const handleSignUpSubmit = async () => {
       resetErrors();
       submitted.value = true;
       const data = {
+        avatar: avatarLink.value,
         first_name: signupUser.first_name,
         last_name: signupUser.last_name,
         email: signupUser.email,
@@ -145,6 +166,7 @@ export default {
         try {
           const res = await axios.post('/users/register', data);
           console.log(res);
+          showToastMessage();
           //Successful Signup > Redirection to login page
           router.push({ path: '/login' });
         } catch (err) {
@@ -154,6 +176,7 @@ export default {
         }
       }
     };
+
     const resetErrors = () => {
       (errors.first_name = ''),
         (errors.last_name = ''),
@@ -209,7 +232,7 @@ export default {
 </script>
 <style>
 #signup-block.auth-wrapper {
-  margin-top: 4em;
+  margin-top: 1.5em;
 }
 #signup-block .auth-inner {
   padding: 20px 45px 25px 45px;

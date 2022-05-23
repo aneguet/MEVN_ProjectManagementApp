@@ -5,7 +5,9 @@
       <PanelMenu :model="items" />
     </div>
     <div class="rcolumn">
-      <div id="welcomeuser">
+      <!-- Delete dialog confirmation  -->
+      <ConfirmDialog></ConfirmDialog>
+      <div id="projectDetailNewTask">
         <Button
           label="New Task"
           icon="pi pi-plus"
@@ -38,11 +40,12 @@
           <ProgressBar :value="remainingHPercentage" class="remain-hours"
             >{{ remainingHours }} h</ProgressBar
           >
-          <p><span>Estimated:</span> {{ timeSchedule.estimated_hours }} h</p>
         </div>
-        <p v-else>
-          <span>Remaining:</span> 0h&nbsp;&nbsp;<span>Estimated:</span>
-          {{ timeSchedule.estimated_hours }} h
+        <p>
+          <span>Remaining:</span> {{ remainingHours }} h&nbsp;&nbsp;<span
+            >Estimated: </span
+          >{{ timeSchedule.estimated_hours }} h&nbsp;&nbsp;<span>Spent:</span>
+          {{ timeSchedule.spent_hours }} h
         </p>
 
         <!-- Dates -->
@@ -149,7 +152,7 @@
                   <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-danger"
-                    @click="deleteTask(todoTask._id)"
+                    @click="deleteTask(todoTask._id, todoTask.name)"
                   />
                 </div>
               </template>
@@ -209,7 +212,7 @@
                   <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-danger"
-                    @click="deleteTask(doingTask._id)"
+                    @click="deleteTask(doingTask._id, doingTask.name)"
                   />
                 </div>
               </template>
@@ -269,7 +272,7 @@
                   <Button
                     icon="pi pi-trash"
                     class="p-button-rounded p-button-danger"
-                    @click="deleteTask(doneTask._id)"
+                    @click="deleteTask(doneTask._id, doneTask.name)"
                   />
                 </div>
               </template>
@@ -284,12 +287,14 @@
 <script>
 import projectcrud from '../modules/projectcrud';
 import taskcrud from '../modules/taskcrud';
+import { useConfirm } from 'primevue/useconfirm';
 import utils from '../modules/utils';
 import { useRouter } from 'vue-router';
 // import { onMounted } from 'vue';
 export default {
   name: 'ProjectDetail',
   setup() {
+    const confirm = useConfirm();
     const router = useRouter();
     const {
       GetProjectById,
@@ -301,7 +306,8 @@ export default {
       projectState,
       projectStateClass,
     } = projectcrud();
-    const { GetTasksByProject, todoTasks, doingTasks, doneTasks } = taskcrud();
+    const { GetTasksByProject, todoTasks, doingTasks, doneTasks, DeleteTask } =
+      taskcrud();
     const { isUserAdmin } = utils();
     var moment = require('moment'); // date formatting package
     // Gets user email comparing the user id and the project members array
@@ -335,6 +341,26 @@ export default {
       // project id
       console.log(projectId);
       router.push('/project/newTask/' + projectId);
+    };
+
+    const editTask = (taskId) => {
+      console.log(taskId);
+      router.push('/project/editTask/' + taskId); // FIXME No es error pero comprobar que funciona
+    };
+
+    const deleteTask = (taskId, taskName) => {
+      confirm.require({
+        message: 'Are you sure that you want to delete it?',
+        header: 'Deleting ' + taskName,
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+          DeleteTask(taskId);
+          // Reload data
+          GetTasksByProject();
+        },
+        reject: () => {},
+      });
     };
     // Menu
     const items = [
@@ -373,6 +399,8 @@ export default {
       getMemberProjectRoles,
       items,
       newTask,
+      editTask,
+      deleteTask,
     };
   },
 };
@@ -382,6 +410,9 @@ export default {
 .rcolumn fieldset,
 .rcolumn .p-panel.p-component {
   margin-bottom: 1em;
+}
+.flexend {
+  justify-self: flex-end;
 }
 #project-name .icon-weight {
   font-weight: bolder;
@@ -429,5 +460,10 @@ export default {
 }
 .p-tabview .p-tabview-panels {
   min-height: 288px;
+}
+#projectDetailNewTask {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 }
 </style>

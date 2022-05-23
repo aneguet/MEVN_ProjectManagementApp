@@ -5,6 +5,8 @@
       <PanelMenu :model="items" />
     </div>
     <div class="rcolumn">
+      <!-- Delete dialog confirmation  -->
+      <ConfirmDialog></ConfirmDialog>
       <div id="welcomeuser">
         <p class="text-center">Hi, {{ user.first_name }}</p>
         <Button
@@ -15,6 +17,9 @@
           @click="newProject()"
         />
       </div>
+      <Message v-if="errors.message" severity="error" :closable="false">{{
+        errors.message
+      }}</Message>
       <div>
         <!-- Projects Table -->
         <DataTable :value="userProjects">
@@ -24,7 +29,7 @@
             <div>List of Projects</div>
           </template>
           <Column field="name" header="Name" sortable></Column>
-          <Column field="stakeholder" header="Stakeholder"></Column>
+          <Column field="stakeholder" header="Stakeholder" sortable></Column>
           <Column header="Leader">
             <template #body="{ data }">
               <img
@@ -33,9 +38,7 @@
                 width="32"
                 style="vertical-align: middle; margin-right: 4px"
               />
-              <span class="image-text"
-                >{{ data.leader.first_name }} {{ data.leader.last_name }}</span
-              >
+              <span class="image-text">{{ data.leader.email }}</span>
             </template>
           </Column>
 
@@ -49,13 +52,12 @@
               <Button
                 icon="pi pi-pencil"
                 class="p-button-rounded p-button-success mx-2"
-                @click="editProject(slotProps.data._id)"
-              />
-              &nbsp;
+                @click="editProject(slotProps.data._id, slotProps.data.leader)"
+              />&nbsp;
               <Button
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-danger"
-                @click="deleteProject(slotProps.data._id)"
+                @click="deleteProject(slotProps.data._id, slotProps.data.name)"
               />
             </template>
           </Column>
@@ -67,18 +69,23 @@
 
 <script>
 import usercrud from '../modules/usercrud'; // composable(reusable)
+import { useConfirm } from 'primevue/useconfirm';
 import projectcrud from '../modules/projectcrud'; // composable(reusable)
 import utils from '../modules/utils';
-import { onMounted } from 'vue';
+import { onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
 export default {
   name: 'HomeView',
   setup() {
+    const confirm = useConfirm();
     const router = useRouter();
     const { user, GetUser } = usercrud();
-    const { GetProjectsByUser, userProjects, GetAllProjects } = projectcrud();
+    const { GetProjectsByUser, userProjects, GetAllProjects, DeleteProject } =
+      projectcrud();
     const { isUserLoggedIn, isUserAdmin } = utils();
-
+    const errors = reactive({
+      message: '',
+    });
     const newProject = () => {
       router.push('/project/new');
     };
@@ -87,13 +94,17 @@ export default {
       console.log(projectId);
       router.push('/project/' + projectId);
     };
-    const editProject = (projectId) => {
+    const editProject = (projectId, leader) => {
+      //check if user is leader or admin before proceeding
+      if (UserHasProjectRights(leader)) {
+        //redirect to project edit
+        router.push('/project/edit/' + projectId);
+      } else {
+        // Error message
+        errors.message = 'To edit this project you must be a Leader or Admin';
+      }
       // project id
-      console.log(projectId);
-    };
-    const deleteProject = (projectId) => {
-      // project id
-      console.log(projectId);
+      // console.log(projectId);
     };
     onMounted(() => {
       // If user is logged in, we get the data
@@ -104,6 +115,19 @@ export default {
         isUserAdmin() ? GetAllProjects() : GetProjectsByUser();
       }
     });
+    const UserHasProjectRights = (leader) => {
+      // We empty the errors message value
+      errors.message = '';
+      if (
+        leader._id == localStorage.getItem('user_id') ||
+        localStorage.getItem('role') == 'admin'
+      ) {
+        // User is leader of the project or admin
+        return true;
+      } else {
+        return false;
+      }
+    };
     // Menu
     const items = [
       {
@@ -124,6 +148,23 @@ export default {
       },
     ];
 
+    const deleteProject = (projectId, projectName) => {
+      confirm.require({
+        message: 'Are you sure that you want to delete it?',
+        header: 'Deleting ' + projectName,
+        icon: 'pi pi-info-circle',
+        acceptClass: 'p-button-danger',
+        accept: () => {
+          DeleteProject(projectId);
+          // Reload data
+          GetAllProjects();
+        },
+        reject: () => {
+          console.log('rejected');
+        },
+      });
+    };
+
     return {
       user,
       userProjects,
@@ -132,6 +173,7 @@ export default {
       deleteProject,
       editProject,
       items,
+      errors,
     };
   },
 };

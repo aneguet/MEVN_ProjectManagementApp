@@ -7,7 +7,7 @@ const getProjects = () => {
   const router = useRouter();
   const userProjects = ref({});
   const projectLeader = ref({});
-  const project = ref({});
+  let project = ref({});
   const timeSchedule = ref({});
   const remainingHours = ref(0);
   const remainingHPercentage = ref(0);
@@ -24,10 +24,12 @@ const getProjects = () => {
 
     if (remainingHours.value == 0) {
       if (nowDate > timeSchedule.value.due_date) {
+        // due date is past
         projectState.value = 'Complete';
       }
     } else {
-      if (nowDate > timeSchedule.value.due_date) {
+      if (nowDate > timeSchedule.value.due_date && remainingHours.value > 0) {
+        // due date is past but there are still remaining hours
         projectState.value = 'Overdue';
       }
     }
@@ -56,6 +58,24 @@ const getProjects = () => {
         .then((res) => {
           console.log(res.data);
           router.push('/project/' + res.data._id);
+        });
+    } catch (err) {
+      console.log(err);
+      requestError.value = err;
+    }
+  };
+  const EditProject = async (data) => {
+    try {
+      await axios
+        .put('/projects/project', data, {
+          headers: {
+            'auth-token': localStorage.getItem('token'),
+            id: projectId.value,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+          router.push('/project/' + projectId.value);
         });
     } catch (err) {
       console.log(err);
@@ -111,6 +131,7 @@ const getProjects = () => {
           // Save remaining hours and calculate percentage
           remainingHours.value =
             timeSchedule.value.estimated_hours - timeSchedule.value.spent_hours;
+          if (remainingHours.value < 0) remainingHours.value = 0;
           remainingHPercentage.value =
             remainingHours.value == 0
               ? 0
@@ -123,14 +144,31 @@ const getProjects = () => {
         })
         .then(() => {
           SetProjectStateClass(projectState.value);
-          SetNewTaskProjectMembers();
+          SetTaskProjectMembers();
         });
     } catch (err) {
       console.log(err);
     }
   };
-
-  const SetNewTaskProjectMembers = () => {
+  // Delete project by id
+  const DeleteProject = async (projectId) => {
+    try {
+      await axios
+        .delete('/projects/project', {
+          headers: {
+            'auth-token': localStorage.getItem('token'),
+            id: projectId,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (err) {
+      console.log(err);
+      requestError.value = err;
+    }
+  };
+  const SetTaskProjectMembers = () => {
     let aux;
     aux = project.value.members;
     newTaskProjectMembers.value = aux.map((el) => ({
@@ -144,6 +182,7 @@ const getProjects = () => {
     GetProjectsByUser,
     GetAllProjects,
     GetProjectById,
+    EditProject,
     project,
     projectLeader,
     timeSchedule,
@@ -154,6 +193,7 @@ const getProjects = () => {
     CreateNewProject,
     requestError,
     newTaskProjectMembers,
+    DeleteProject,
   };
 };
 export default getProjects;

@@ -7,8 +7,8 @@ const getUsers = () => {
   const user = ref({});
   const users = ref({});
   const newProjectUsers = ref({});
-
-  // Get Logged in User (for login only)
+  let requestError = ref('');
+  // Get Logged in User
   const GetUser = async () => {
     try {
       await axios
@@ -16,7 +16,6 @@ const getUsers = () => {
           headers: { 'auth-token': localStorage.getItem('token') },
         })
         .then((res) => {
-          console.log(res.data);
           user.value = res.data;
           console.log(user.value);
         });
@@ -34,12 +33,31 @@ const getUsers = () => {
         })
         .then((res) => {
           users.value = res.data;
+          console.log(res.data);
         })
         .then(() => {
           SetNewProjectUsers();
         });
     } catch (err) {
       console.log(err);
+    }
+  };
+  // Update user by id
+  const EditUser = async (data) => {
+    try {
+      await axios
+        .put('/users/user', data, {
+          headers: {
+            'auth-token': localStorage.getItem('token'),
+            id: localStorage.getItem('user_id'),
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (err) {
+      console.log(err);
+      requestError.value = err;
     }
   };
 
@@ -74,6 +92,8 @@ const getUsers = () => {
     newProjectUsers,
     GetUser,
     GetAllUsers,
+    EditUser,
+    requestError,
   };
 };
 export default getUsers;
