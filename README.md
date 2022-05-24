@@ -5,11 +5,18 @@ The project is layered into two parts:
 - Frontend: Vanilla Javascript combined with Vue 3, PrimeVue, Axios and Moment package.
 - Backend (API): MongoDB, Mongoose, ExpressJS, NodeJS, Swagger and Autopopulate package.
 
+[Link](https://timefly-mevn.herokuapp.com/api/docs/) to API (swagger).
+
+[Link](https://timefly-mevn.netlify.app/) to Timefly Website.
+
+
+
 # Backend (API)
 
 ## Start server
 
 ```
+cd backend
 npm run start-dev
 ```
 
@@ -24,6 +31,7 @@ http://localhost:4000/api/docs/
 ## Install dependencies
 
 ```
+cd frontend
 npm install
 ```
 
