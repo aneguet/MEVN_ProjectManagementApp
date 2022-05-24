@@ -16,6 +16,7 @@ The project is layered into two parts:
 ## Start server
 
 ```
+cd backend
 npm run start-dev
 ```
 
@@ -30,6 +31,7 @@ http://localhost:4000/api/docs/
 ## Install dependencies
 
 ```
+cd frontend
 npm install
 ```
 
