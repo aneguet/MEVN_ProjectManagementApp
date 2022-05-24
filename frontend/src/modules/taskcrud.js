@@ -22,8 +22,7 @@ const getTasks = () => {
         .post('/tasks/task', data, {
           headers: { 'auth-token': localStorage.getItem('token') },
         })
-        .then((res) => {
-          console.log(res.data);
+        .then(() => {
           router.push('/project/' + Id.value);
         });
     } catch (err) {
@@ -40,8 +39,7 @@ const getTasks = () => {
             id: Id.value,
           },
         })
-        .then((res) => {
-          console.log(res.data);
+        .then(() => {
           router.push('/project/' + data.project_id);
         });
     } catch (err) {
@@ -62,7 +60,6 @@ const getTasks = () => {
         .then((res) => {
           projectTasks.value = res.data;
           setTasksByStatus();
-          console.log(res.data);
         });
     } catch (err) {
       console.log(err);
@@ -120,16 +117,12 @@ const getTasks = () => {
   // Delete task by id
   const DeleteTask = async (taskId) => {
     try {
-      await axios
-        .delete('/tasks/task', {
-          headers: {
-            'auth-token': localStorage.getItem('token'),
-            id: taskId,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-        });
+      await axios.delete('/tasks/task', {
+        headers: {
+          'auth-token': localStorage.getItem('token'),
+          id: taskId,
+        },
+      });
     } catch (err) {
       console.log(err);
       requestError.value = err;
@@ -140,9 +133,11 @@ const getTasks = () => {
     todoTasks.value = projectTasks.value.filter(
       (task) => task.task_status === 'Todo'
     );
+
     doneTasks.value = projectTasks.value.filter(
       (task) => task.task_status === 'Done'
     );
+
     doingTasks.value = projectTasks.value.filter(
       (task) => task.task_status === 'Doing'
     );

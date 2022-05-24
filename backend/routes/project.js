@@ -52,7 +52,6 @@ router.post('/project', verifyToken, async (req, res) => {
       members: setMembers(req.body.members, req.user.id),
       technologies: req.body.technologies,
       time_schedule: req.body.time_schedule,
-      // project_tasks: req.body.project_tasks ? req.body.project_tasks : [],
     });
     const savedProject = await projectObject.save();
     res.json(savedProject);
@@ -68,7 +67,6 @@ router.put(
   async (req, res) => {
     const projectId = req.header('id');
     let updatedProject = req.body;
-    // updatedProject = checkMembersAndTechs(updatedProject); > Update project without techs and members
 
     try {
       const projectToUpdate = await Project.findByIdAndUpdate(
@@ -166,40 +164,6 @@ let checkMembersLeader = (members) => {
     });
   }
 };
-
-// UPDATE Project member(s)
-//isMemberLeaderOrAdmin
-// router.put('/project/members', verifyToken, async (req, res) => {
-//   const projectId = req.header('id');
-//   let updatedMembers = req.body;
-//   // checkMembersLeader(updatedMembers);
-//   try {
-//     const projects = await Project.findById({ _id: projectId });
-//     let auxArr = [];
-//     auxArr.push(updatedMembers);
-//     // projects.members = auxArr;
-//     // {
-//     //   $set: someObjectWithNewData;
-//     // }
-//     await projects.save();
-//   } catch (err) {
-//     res.status(500).send({ message: 'Error updating Project' });
-//   }
-// });
-// let checkMembersAndTechs = (updatedProject) => {
-//   if (updatedProject.members) {
-//     //user is trying to update members in the same request
-//     delete updatedProject.members;
-//   }
-//   if (updatedProject.technologies) {
-//     //user is trying to update technologies in the same request
-//     delete updatedProject.technologies;
-//   }
-//   return updatedProject;
-// };
-// DELETE Project member(s)
-// UPDATE Project technology(s)
-// DELETE Project technology(s)
 
 // Routes export
 module.exports = router;

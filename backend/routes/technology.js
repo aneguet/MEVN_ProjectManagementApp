@@ -51,21 +51,6 @@ router.delete('/technology', async (req, res) => {
     res.status(500).send({ message: 'Error deleting Technology' });
   }
 });
-// GET Project+techs
-// router.get('/byProject', verifyToken, async (req, res) => {
-//   try {
-//     await Project.find()
-//       .populate({
-//         path: 'technologies',
-//         match: { _id: req.header('id') },
-//       })
-//       .exec(function (err, project) {
-//         if (!err) res.json(project);
-//       });
-//   } catch (error) {
-//     res.status(400).json({ error });
-//   }
-// });
 
 // Routes export
 module.exports = router;

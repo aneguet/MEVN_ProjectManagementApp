@@ -18,7 +18,6 @@
           autocomplete="off"
         >
           <div class="p-inputtext-sm">
-            <!-- <h3>Sign Up</h3> -->
             <p class="logo-text">Register to join us</p>
             <Message v-if="errors.message" severity="error" :closable="false">{{
               errors.message
@@ -133,9 +132,7 @@ export default {
     const GetRandomAvatar = async () => {
       try {
         await axios.get('/avatars/randomAvatar').then((res) => {
-          // console.log(res.data);
           avatarLink.value = res.data.img_link;
-          console.log(avatarLink.value);
         });
       } catch (err) {
         console.log(err);
@@ -161,11 +158,9 @@ export default {
         password_confirm: signupUser.password_confirm,
       };
       // validate fields
-      console.log(data);
       if (areFieldsValid()) {
         try {
-          const res = await axios.post('/users/register', data);
-          console.log(res);
+          await axios.post('/users/register', data);
           showToastMessage();
           //Successful Signup > Redirection to login page
           router.push({ path: '/login' });

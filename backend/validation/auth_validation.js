@@ -16,12 +16,6 @@ const registerValidation = (data) => {
     phone: Joi.string().min(7).max(15),
     avatar: Joi.string(),
     weekly_hours: Joi.number().min(0), // Number type includes decimals
-    // assigned_projects: Joi.array(),
-    // assigned_projects: Joi.array().items({
-    //   // If specified, must be an object with specific properties inside
-    //   project: Joi.string().required(),
-    //   tasks: Joi.array().required(),
-    // }),
   });
 
   return schema.validate(data);

@@ -110,7 +110,15 @@
           </template>
           <!-- Card content -->
 
-          <div class="flex align-items-center flex-column sm:flex-row">
+          <div
+            class="flex align-items-center flex-column sm:flex-row"
+            v-if="
+              project != undefined &&
+              project != null &&
+              todoTasks != undefined &&
+              todoTasks != null
+            "
+          >
             <Card v-for="todoTask in todoTasks" :key="todoTask._id">
               <template #title> {{ todoTask.name }} </template>
               <template #subtitle> {{ todoTask.description }} </template>
@@ -158,6 +166,9 @@
               </template>
             </Card>
           </div>
+          <div v-else>
+            <p>No tasks yet</p>
+          </div>
         </TabPanel>
         <!-- Tab 2: Doing -->
         <TabPanel>
@@ -170,7 +181,15 @@
           </template>
           <!-- Card content -->
 
-          <div class="flex align-items-center flex-column sm:flex-row">
+          <div
+            class="flex align-items-center flex-column sm:flex-row"
+            v-if="
+              project != undefined &&
+              project != null &&
+              doingTasks != undefined &&
+              doingTasks != null
+            "
+          >
             <Card v-for="doingTask in doingTasks" :key="doingTask._id">
               <template #title> {{ doingTask.name }} </template>
               <template #subtitle> {{ doingTask.description }} </template>
@@ -218,6 +237,9 @@
               </template>
             </Card>
           </div>
+          <div class="flex align-items-center flex-column sm:flex-row" v-else>
+            <p>No tasks yet</p>
+          </div>
         </TabPanel>
         <!-- Tab 3: Done -->
         <TabPanel>
@@ -230,7 +252,15 @@
           </template>
           <!-- Card content -->
 
-          <div class="flex align-items-center flex-column sm:flex-row">
+          <div
+            class="flex align-items-center flex-column sm:flex-row"
+            v-if="
+              project != undefined &&
+              project != null &&
+              doneTasks != undefined &&
+              doneTasks != null
+            "
+          >
             <Card v-for="doneTask in doneTasks" :key="doneTask._id">
               <template #title> {{ doneTask.name }} </template>
               <template #subtitle> {{ doneTask.description }} </template>
@@ -278,6 +308,9 @@
               </template>
             </Card>
           </div>
+          <div class="flex align-items-center flex-column sm:flex-row" v-else>
+            <p>No tasks yet</p>
+          </div>
         </TabPanel>
       </TabView>
     </div>
@@ -315,7 +348,7 @@ export default {
       const member = members.filter(
         (member) => member.member_id._id === assignedTo
       );
-      // console.log(member.member_id); // undefined
+
       return member[0].member_id.email;
     };
     const getMemberAvatar = (members, assignedTo) => {
@@ -339,12 +372,10 @@ export default {
     GetTasksByProject();
     const newTask = (projectId) => {
       // project id
-      console.log(projectId);
       router.push('/project/newTask/' + projectId);
     };
 
     const editTask = (taskId) => {
-      console.log(taskId);
       router.push('/project/editTask/' + taskId); // FIXME No es error pero comprobar que funciona
     };
 
@@ -381,7 +412,7 @@ export default {
         to: '/',
       },
     ];
-    console.log(projectState);
+
     return {
       project,
       projectLeader,

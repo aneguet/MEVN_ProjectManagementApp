@@ -1,8 +1,6 @@
 import { ref } from 'vue';
-
 import axios from 'axios';
 
-// Reusable functions
 const getUsers = () => {
   const user = ref({});
   const users = ref({});
@@ -17,7 +15,6 @@ const getUsers = () => {
         })
         .then((res) => {
           user.value = res.data;
-          console.log(user.value);
         });
     } catch (err) {
       console.log(err);
@@ -33,7 +30,6 @@ const getUsers = () => {
         })
         .then((res) => {
           users.value = res.data;
-          console.log(res.data);
         })
         .then(() => {
           SetNewProjectUsers();
@@ -45,16 +41,12 @@ const getUsers = () => {
   // Update user by id
   const EditUser = async (data) => {
     try {
-      await axios
-        .put('/users/user', data, {
-          headers: {
-            'auth-token': localStorage.getItem('token'),
-            id: localStorage.getItem('user_id'),
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-        });
+      await axios.put('/users/user', data, {
+        headers: {
+          'auth-token': localStorage.getItem('token'),
+          id: localStorage.getItem('user_id'),
+        },
+      });
     } catch (err) {
       console.log(err);
       requestError.value = err;
@@ -79,13 +71,8 @@ const getUsers = () => {
     }
 
     newProjectUsers.value = [newProjectUsers.value, []];
-    // console.log(newProjectUsers.value);
   };
 
-  // Get User by ID (Admin)
-  // Get all users
-  // Update user by ID
-  // Delete user by ID
   return {
     user,
     users,

@@ -6,9 +6,7 @@
     </div>
     <div class="rcolumn">
       <Toast />
-      <!-- <div id="page-title">
-        <p>New Task</p>
-      </div> -->
+
       <div id="project-form-section" class="mt1">
         <form
           @submit.prevent="handleNewTaskSubmit"
@@ -54,12 +52,6 @@
                   optionLabel="email"
                   :class="{ 'p-invalid': errors.task_status && submitted }"
                 />
-                <!-- <InputText
-                  id="assigned_to"
-                  type="text"
-                  v-model="newTask.assigned_to"
-                  :class="{ 'p-invalid': errors.assigned_to && submitted }"
-                /> -->
               </div>
 
               <br />
@@ -141,7 +133,6 @@ export default {
       resetErrors();
       submitted.value = true;
       if (areFieldsValid()) {
-        console.log(newTask);
         let data = {
           assigned_to: newTask.assigned_to._id,
           description: newTask.description,

@@ -5,9 +5,6 @@
       <PanelMenu :model="items" />
     </div>
     <div class="rcolumn">
-      <!-- <div id="page-title">
-        <p>Edit Task</p>
-      </div> -->
       <div id="project-form-section" class="mt1">
         <form
           @submit.prevent="handleEditTaskSubmit"
@@ -141,7 +138,6 @@ export default {
     const submitted = ref(false);
 
     GetTaskByTaskId(); // The project will give us back the project members
-    // console.log(project.value);
     onMounted(() => {});
     const getUserEmail = (user_id, members) => {
       let user_email = '';
@@ -156,7 +152,6 @@ export default {
       resetErrors();
       submitted.value = true;
       const taskToUpdate = prepareTaskToUpdate();
-      console.log(taskToUpdate);
       EditTask(taskToUpdate);
       if (requestError) errors.message = requestError;
     };

@@ -14,7 +14,6 @@ let taskSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: false,
-    // autopopulate: { select: ['_id', 'first_name', 'last_name'] },
   },
   hours_allocated: { type: Number, required: true, min: 0, default: 0 },
   hours_used: { type: Number, required: false, min: 0, default: 0 },

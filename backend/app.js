@@ -29,6 +29,7 @@ app.use(function (req, res, next) {
     'Access-Control-Allow-Methods',
     'GET,HEAD,OPTIONS,POST,PUT,DELETE'
   );
+  // We add 'id' to the header params to be able to send it from vue when needed
   res.header(
     'Access-Control-Allow-Headers',
     'auth-token, id, Origin, X-Requested-With, Content-Type, Accept'
@@ -55,14 +56,10 @@ mongoose
 
 // ROUTES
 app.get('/', (req, res) => {
-  // http://localhost:4000/
   res.status(200).send({ message: 'Welcome to backend' });
 });
 
 // Import and Use
-// const todoRoutes = require('./routes/todo');
-// app.use('/api/todos', todoRoutes);
-
 const authRoutes = require('./routes/user');
 app.use('/api/users', authRoutes);
 const projectRoutes = require('./routes/project');

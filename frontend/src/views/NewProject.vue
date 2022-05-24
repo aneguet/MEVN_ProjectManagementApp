@@ -189,7 +189,7 @@ export default {
       members: [],
       technologies: [],
       time_schedule: {
-        start_date: '', //new Date().toISOString(),
+        start_date: '',
         due_date: '',
         end_date: '',
         estimated_hours: 0,
@@ -202,7 +202,7 @@ export default {
       stakeholder: '',
       members: '',
       technologies: '',
-      start_date: '', //new Date().toISOString(),
+      start_date: '',
       due_date: '',
       end_date: '',
       estimated_hours: '',
@@ -230,7 +230,6 @@ export default {
         setTechnologies(formTechnologies.value[1]);
         // Prepares the array of members with the ids and other properties
         setMembers(newProjectUsers.value[1]);
-        console.log(newProject);
         CreateNewProject(newProject);
         if (requestError) errors.message = requestError;
       } else {
@@ -330,8 +329,6 @@ export default {
       for (let i = 0; i < technologies.length; i++) {
         newProject.technologies.push(technologies[i]._id);
       }
-
-      // console.log(newProject.technologies);
     };
     const setMembers = (members) => {
       for (let i = 0; i < members.length; i++) {
@@ -339,7 +336,6 @@ export default {
           member_id: members[i]._id,
         });
       }
-      // console.log(newProject.members);
     };
     // Menu
     const items = [

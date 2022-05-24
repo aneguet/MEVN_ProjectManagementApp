@@ -81,6 +81,4 @@ const isUserMemberOrAdmin = (req, res, next) => {
   }
 };
 
-// A project can only be seen by a member
-
 module.exports = { isMemberLeaderOrAdmin, isUserMember, isUserMemberOrAdmin };

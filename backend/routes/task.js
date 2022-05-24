@@ -103,16 +103,6 @@ router.delete('/task', verifyToken, async (req, res) => {
     res.status(500).send({ message: 'Error deleting Project' });
   }
 });
-// DELETE all tasks by project Id
-// const deleteTasksbyProjectId = async (projectId) => {
-//   try {
-//     await Task.deleteMany({
-//       project_id: projectId,
-//     });
-//   } catch (err) {
-//     return err;
-//   }
-// };
-// Routes export
 
+// Routes export
 module.exports = router;

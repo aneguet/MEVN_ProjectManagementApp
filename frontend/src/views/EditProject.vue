@@ -155,7 +155,7 @@ export default {
   name: 'EditProject',
   setup() {
     const { GetProjectById, requestError, project, timeSchedule, EditProject } =
-      projectcrud(); // EditProject,
+      projectcrud();
     const { isUserAdmin } = utils();
 
     const editProject = reactive({
@@ -164,7 +164,7 @@ export default {
       description: '',
       stakeholder: '',
       time_schedule: {
-        start_date: '', //new Date().toISOString(),
+        start_date: '',
         due_date: '',
         end_date: '',
 
@@ -176,7 +176,7 @@ export default {
       name: '',
       description: '',
       stakeholder: '',
-      start_date: '', //new Date().toISOString(),
+      start_date: '',
       due_date: '',
       end_date: '',
       spent_hours: '',
@@ -194,7 +194,6 @@ export default {
       submitted.value = true;
       const projectToUpdate = prepareProjectToUpdate();
       EditProject(projectToUpdate);
-      console.log(projectToUpdate);
       if (requestError) errors.message = requestError;
     };
     const resetErrors = () => {

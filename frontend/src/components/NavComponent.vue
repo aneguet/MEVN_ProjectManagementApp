@@ -41,9 +41,6 @@
         class="p-button-outlined nav-link p-button-sm button-padding"
         icon="pi pi-sign-out"
       />
-      <!-- <Avatar class="avatar-style" shape="circle" v-if="isUserLoggedIn()">
-        <img :src="avatar" to="/user" />
-      </Avatar> -->
     </div>
   </div>
 </template>

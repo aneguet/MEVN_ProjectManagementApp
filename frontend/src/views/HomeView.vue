@@ -68,9 +68,9 @@
 </template>
 
 <script>
-import usercrud from '../modules/usercrud'; // composable(reusable)
+import usercrud from '../modules/usercrud';
 import { useConfirm } from 'primevue/useconfirm';
-import projectcrud from '../modules/projectcrud'; // composable(reusable)
+import projectcrud from '../modules/projectcrud';
 import utils from '../modules/utils';
 import { onMounted, reactive } from 'vue';
 import { useRouter } from 'vue-router';
@@ -91,7 +91,6 @@ export default {
     };
     const viewProject = (projectId) => {
       // project id
-      console.log(projectId);
       router.push('/project/' + projectId);
     };
     const editProject = (projectId, leader) => {
@@ -103,15 +102,12 @@ export default {
         // Error message
         errors.message = 'To edit this project you must be a Leader or Admin';
       }
-      // project id
-      // console.log(projectId);
     };
     onMounted(() => {
       // If user is logged in, we get the data
       if (isUserLoggedIn()) {
         GetUser();
-        // use role > user projects
-        // admin role > all projects
+        // use role > user projects · admin role > all projects
         isUserAdmin() ? GetAllProjects() : GetProjectsByUser();
       }
     });
@@ -159,9 +155,7 @@ export default {
           // Reload data
           GetAllProjects();
         },
-        reject: () => {
-          console.log('rejected');
-        },
+        reject: () => {},
       });
     };
 

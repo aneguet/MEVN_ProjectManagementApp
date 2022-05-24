@@ -81,11 +81,10 @@ export default {
         email: loginUser.email,
         password: loginUser.password,
       };
-      console.log(data);
+
       if (areFieldsValid()) {
         try {
           const res = await axios.post('/users/login', data);
-          console.log(res.data.data);
           // Store user token and other user fields in localStorage (we need them to be accessible in all the components and views)
           localStorage.setItem('token', res.data.data.token);
           localStorage.setItem('user_id', res.data.data.user._id);

@@ -5,9 +5,6 @@
       <PanelMenu :model="items" />
     </div>
     <div class="rcolumn">
-      <!-- <Message v-if="errors.message" severity="error" :closable="false">{{
-        errors.message
-      }}</Message> -->
       <div>
         <!-- Projects Table -->
         <DataTable :value="users">

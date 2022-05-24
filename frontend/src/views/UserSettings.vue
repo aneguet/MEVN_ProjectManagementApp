@@ -243,8 +243,6 @@ export default {
       if (areFieldsValid()) {
         let userToUpdate = ref({});
         const fieldsToUpdate = prepareUserToUpdate(userToUpdate.value);
-        console.log(fieldsToUpdate);
-        console.log(userToUpdate);
         if (fieldsToUpdate > 0) {
           EditUser(userToUpdate.value);
           if (requestError.value && requestError.value != '') {

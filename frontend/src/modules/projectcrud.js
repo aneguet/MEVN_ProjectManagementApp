@@ -56,7 +56,6 @@ const getProjects = () => {
           headers: { 'auth-token': localStorage.getItem('token') },
         })
         .then((res) => {
-          console.log(res.data);
           router.push('/project/' + res.data._id);
         });
     } catch (err) {
@@ -73,8 +72,7 @@ const getProjects = () => {
             id: projectId.value,
           },
         })
-        .then((res) => {
-          console.log(res.data);
+        .then(() => {
           router.push('/project/' + projectId.value);
         });
     } catch (err) {
@@ -90,7 +88,6 @@ const getProjects = () => {
         })
         .then((res) => {
           userProjects.value = res.data;
-          console.log(res.data);
         });
     } catch (err) {
       console.log(err);
@@ -105,7 +102,6 @@ const getProjects = () => {
         })
         .then((res) => {
           userProjects.value = res.data;
-          console.log(res.data);
         });
     } catch (err) {
       console.log(err);
@@ -123,14 +119,16 @@ const getProjects = () => {
         })
         .then((res) => {
           project.value = res.data;
-          console.log(res.data);
           // Save leader
           projectLeader.value = res.data.leader._id;
+
           // Save time schedule array
           timeSchedule.value = res.data.time_schedule;
+
           // Save remaining hours and calculate percentage
           remainingHours.value =
             timeSchedule.value.estimated_hours - timeSchedule.value.spent_hours;
+
           if (remainingHours.value < 0) remainingHours.value = 0;
           remainingHPercentage.value =
             remainingHours.value == 0
@@ -153,16 +151,12 @@ const getProjects = () => {
   // Delete project by id
   const DeleteProject = async (projectId) => {
     try {
-      await axios
-        .delete('/projects/project', {
-          headers: {
-            'auth-token': localStorage.getItem('token'),
-            id: projectId,
-          },
-        })
-        .then((res) => {
-          console.log(res.data);
-        });
+      await axios.delete('/projects/project', {
+        headers: {
+          'auth-token': localStorage.getItem('token'),
+          id: projectId,
+        },
+      });
     } catch (err) {
       console.log(err);
       requestError.value = err;
@@ -171,6 +165,8 @@ const getProjects = () => {
   const SetTaskProjectMembers = () => {
     let aux;
     aux = project.value.members;
+
+    // we'll use it later when creating a new task and we need the current members of the project for the dropdown
     newTaskProjectMembers.value = aux.map((el) => ({
       _id: el.member_id._id,
       email: el.member_id.email,

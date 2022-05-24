@@ -9,7 +9,6 @@ const getTechnologies = () => {
   const GetAllTechnologies = async () => {
     try {
       await axios.get('/technologies').then((res) => {
-        // console.log(res.data);
         technologies.value = res.data;
         formTechnologies.value = [technologies.value, []]; // The second array will store the technologies selected by the user
       });
