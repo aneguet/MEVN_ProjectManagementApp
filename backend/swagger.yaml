@@ -4,7 +4,7 @@ info:
   description: MongoDB ExpressJS NodeJS REST API for a Project Management App.<br />Github repository available [here](https://github.com/aneguet/MEVN_ProjectManagementApp).<br />Some endpoints require `auth-token` in order to be executed.
   version: 1.0.0
 servers:
-  - url: https://timefly-mevn.herokuapp.com/api/
+  - url: https://timefly-mevn.onrender.com/api/
     description: Heroku remote server
   - url: http://localhost:4000/api/
     description: Localhost
